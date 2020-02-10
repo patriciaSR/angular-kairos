@@ -107,11 +107,11 @@ Amplia compatibilidad con los navegadores
 
 #### Resumen
 
-• Sigue y aprovecha todos los estándares web de la W3C con lo que no nos estamos casando con la tecnología.
-• Permite tener un código único y ejecutar en multidispositivos.
-• Tiene un rendimiento óptimo y es más simple y comprensible.
-• Permite tener todo nuestro código bajo una red de seguridad de tests y un marco de integración y despliegue continuo.
-• Su flexibilidad nos permite interacturar con cualquier tipo de dispositivo físico.
+* Sigue y aprovecha todos los estándares web de la W3C con lo que no nos estamos casando con la tecnología.
+* Permite tener un código único y ejecutar en multidispositivos.
+* Tiene un rendimiento óptimo y es más simple y comprensible.
+* Permite tener todo nuestro código bajo una red de seguridad de tests y un marco de integración y despliegue continuo.
+* Su flexibilidad nos permite interacturar con cualquier tipo de dispositivo físico.
 
 Vue es mucho más parecido a AngularJS y tiene un mejor uso para integrarlo dentro de un marco de una página estática.
 
@@ -366,14 +366,14 @@ Clase anotada con el decorador @Component. Obligatorio tiene que tener las propi
 
 Los componentes tienen un ciclo de vida del cual podemos hacer hook y meter código
 gracias a estas funciones que por defecto tenemos disponibles y que tienen que implementar cada una de las interfaces, entre paréntesis el nombre del método a implementar:
-• **OnChanges** (ngOnChanges): se llama cuando un valor de input modifica su valor. Recibe el objeto SimpleChange para recuperar el valor actual y el anterior.
-• **OnInit** (ngOnInit): se llama después del primer OnChanges y del constructor.
-• **DoCheck** (ngDoCheck): se lanza después de cambiar un valor o una dirección de memoria (se puede personalizar el change detection).
+* **OnChanges** (ngOnChanges): se llama cuando un valor de input modifica su valor. Recibe el objeto SimpleChange para recuperar el valor actual y el anterior.
+* **OnInit** (ngOnInit): se llama después del primer OnChanges y del constructor.
+* **DoCheck** (ngDoCheck): se lanza después de cambiar un valor o una dirección de memoria (se puede personalizar el change detection).
 – **AfterContentInit** (ngAfterContentInit): se llama justo después de inicializar el componente.
 – **AfterContentChecked** (ngAfterContentChecked): después de cada check del contenido del componente.
 – **AfterViewInit** (ngAfterViewInit): después de que la vista del componente haya sido inicializada.
 – **AfterViewChecked** (ngAfterViewChecked): después de cada check del contenido de la vista.
-• **OnDestroy** (ngOnDestroy): justo antes de que la vista haya sido destruida.
+* **OnDestroy** (ngOnDestroy): justo antes de que la vista haya sido destruida.
 
 Angular no cumple con el standar de los ciclos de vida, se han creado su propio ciclo de vida.
 Implementar código js dentro de OnInit() es el evento más utilizado. Se hacen las inicializaciones del componente. El constructor únicamente se deja para la inyección de dependencias.
