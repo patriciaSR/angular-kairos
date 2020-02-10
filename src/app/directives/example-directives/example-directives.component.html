@@ -1,1 +1,16 @@
-<p>example-directives works!</p>
+<h2>List of colors</h2>
+<ul>
+  <li
+    *ngFor="let color of colors;
+    let i = index; let o = odd; let e = even; let l = last;"
+    [style.color]="color"
+    [ngClass]="{even: e && !l, odd: o && !l , last: l}"
+    [ngSwitch]="color"
+    >
+
+    <p *ngSwitchCase="'blue'"> I am bluuuueeeeee</p>
+    <p *ngSwitchDefault> {{ color }}</p>
+
+  </li>
+
+</ul>

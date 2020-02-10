@@ -1,1 +1,8 @@
-<app-example-directives></app-example-directives>
+<div *ngIf="show; then ok else error"></div>
+
+<ng-template #ok>
+  <app-example-directives></app-example-directives>
+</ng-template>
+<ng-template #error>
+  No component show
+</ng-template>

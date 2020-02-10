@@ -7,6 +7,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'angular-kairos';
+  show = true;
 
   ngOnInit(): void {
     throw new Error('Method not implemented.');

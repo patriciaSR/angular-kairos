@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExampleDirectivesComponent implements OnInit {
 
+  colors: string[];
+
   constructor() { }
 
   ngOnInit(): void {
+    this.colors = ['red', 'blue', 'yellow', 'white', 'pink', 'purple'];
   }
 
 }
