@@ -369,10 +369,10 @@ gracias a estas funciones que por defecto tenemos disponibles y que tienen que i
 * **OnChanges** (ngOnChanges): se llama cuando un valor de input modifica su valor. Recibe el objeto SimpleChange para recuperar el valor actual y el anterior.
 * **OnInit** (ngOnInit): se llama después del primer OnChanges y del constructor.
 * **DoCheck** (ngDoCheck): se lanza después de cambiar un valor o una dirección de memoria (se puede personalizar el change detection).
-– **AfterContentInit** (ngAfterContentInit): se llama justo después de inicializar el componente.
-– **AfterContentChecked** (ngAfterContentChecked): después de cada check del contenido del componente.
-– **AfterViewInit** (ngAfterViewInit): después de que la vista del componente haya sido inicializada.
-– **AfterViewChecked** (ngAfterViewChecked): después de cada check del contenido de la vista.
+  - **AfterContentInit** (ngAfterContentInit): se llama justo después de inicializar el componente.
+  - **AfterContentChecked** (ngAfterContentChecked): después de cada check del contenido del componente.
+  - **AfterViewInit** (ngAfterViewInit): después de que la vista del componente haya sido inicializada.
+  - **AfterViewChecked** (ngAfterViewChecked): después de cada check del contenido de la vista.
 * **OnDestroy** (ngOnDestroy): justo antes de que la vista haya sido destruida.
 
 Angular no cumple con el standar de los ciclos de vida, se han creado su propio ciclo de vida.
