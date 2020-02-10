@@ -8,11 +8,17 @@ import { Component, OnInit } from '@angular/core';
 export class ExampleDirectivesComponent implements OnInit {
 
   colors: string[];
+  today: Date = new Date();
+  genero: string;
+  generoMapping: {[key: string]: string};
 
   constructor() { }
 
   ngOnInit(): void {
     this.colors = ['red', 'blue', 'yellow', 'white', 'pink', 'purple'];
+
+    this.genero = 'hombre';
+    this.generoMapping = {hombre: 'Sr.', mujer: 'Sra.'};
   }
 
 }

@@ -1,3 +1,4 @@
+<!-- Práctica de directivas -->
 <h2>List of colors</h2>
 <ul>
   <li
@@ -10,7 +11,17 @@
 
     <p *ngSwitchCase="'blue'"> I am bluuuueeeeee</p>
     <p *ngSwitchDefault> {{ color }}</p>
-
   </li>
-
 </ul>
+
+<!-- Práctica de pipes -->
+<h2>Pipes</h2>
+<p>{{ 'fecha' | uppercase }} / {{ 'FECHA' | lowercase }} / {{ 'fecha' | titlecase }}</p>
+<p>{{ genero | i18nSelect:generoMapping }} Paco</p>
+
+<p>{{ today | date:"medium" }}</p>
+<p>{{ today | date:"yyyy-MM-dd" }}</p>
+
+<p>{{ 'surprise' | decorator:'^^' }}</p>
+
+
