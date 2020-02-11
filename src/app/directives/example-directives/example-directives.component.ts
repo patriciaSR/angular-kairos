@@ -11,11 +11,13 @@ export class ExampleDirectivesComponent implements OnInit {
   today: Date = new Date();
   genero: string;
   generoMapping: {[key: string]: string};
+  decorator: string;
 
   constructor() { }
 
   ngOnInit(): void {
     this.colors = ['red', 'blue', 'yellow', 'white', 'pink', 'purple'];
+    this.decorator = '**';
 
     this.genero = 'hombre';
     this.generoMapping = {hombre: 'Sr.', mujer: 'Sra.'};

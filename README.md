@@ -535,18 +535,48 @@ Los pipes se pueden encadenar con el simbolo `|` uno detrás de otro siempre que
 También puedes crear pipes propios. Si solo es una transformación de datos a nivel visual, es el momento de crear un pipe.
 
 Lo primero que tenemos que hacer es decorar la clase con el decorador @Pipe donde realizamos la definición de las propiedades del pipe:
-• **name**: será el nombre que identifique al pipe en el template de un componente.
-• **pure**: true (por defecto) si es stateless o false si es stateful.
+* **name**: será el nombre que identifique al pipe en el template de un componente.
+* **pure**: true (por defecto) si es stateless o false si es stateful.
 
 Ahora tenemos que crear una clase que implemente la interfaz PipeTransform y dentro del método transform ejecutar la lógica que queramos aplicar al valor, teniendo en cuenta que en el primer argumento vamos a recibir el valor al que queremos aplicar la transformación y en el segundo argumento y sucesivos, los parámetros de parametrización
 
 No olvides declarar la clase en la propiedad declarations del módulo correspondiente
 
+Práctica:
+Se crea un módulo pipe y dentro un pipe decorator.
+Para poder usar el pipe en otro módulo, lo tenemos que exportar en el pipe.module:
+exports: [DecoratorPipe].
+Y en el módulo donde lo queramos utilizar, importamos el módulo de las Pipes en el DirectivesModule.
+imports: [PipeModule].
+
+En los imports solo van módulos. Solo se exportan componentes, pipes y directivas.
+
+Se pueden usar variables declaradas en el componente para los argumentos de los pipes.
 
 
+## Clase 2
 
+### Data Binding
+el bidireccional usarlo con cuidado porque empeora el rendimiento.
+Tipos:
 
+#### Interpolación {{}}
 
+#### Property binding []
+
+##### Element property
+Bindear propiedades del HTML con variables declaradas en el componente. No poner interpolación después del =
+
+##### Directive property
+ngIf, ngClass...
+Se pueden hacer también directivas propias
+
+##### Component property (props, @Inputs)
+Transmitir info de componente padre a hijo. Props que se recogen dentro del componente como @Inputs
+
+#### Event binding ()
+nos permite manejar y crear eventos y asociarlo a métodos implementados en el componente.
+Emisión de eventos: se define un método que emite el evento al componente padre (this.evento.emit(info)) y pasa la información de hijo a padre a través de $event. El nuevo evento se declara como un @Output() = new EventEmitter()
 
 
 

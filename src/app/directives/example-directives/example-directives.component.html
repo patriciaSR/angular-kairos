@@ -9,8 +9,8 @@
     [ngSwitch]="color"
     >
 
-    <p *ngSwitchCase="'blue'"> I am bluuuueeeeee</p>
-    <p *ngSwitchDefault> {{ color }}</p>
+    <p *ngSwitchCase="'blue'"> {{'I am bluuuueeeeee' | uppercase | decorator:'__' }}</p>
+    <p *ngSwitchDefault> {{ color | uppercase | decorator: decorator }}</p>
   </li>
 </ul>
 
@@ -21,7 +21,5 @@
 
 <p>{{ today | date:"medium" }}</p>
 <p>{{ today | date:"yyyy-MM-dd" }}</p>
-
-<p>{{ 'surprise' | decorator:'^^' }}</p>
 
 

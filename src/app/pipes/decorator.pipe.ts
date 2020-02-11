@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'decorator', pure: true
+  name: 'decorator'
 })
-export class ExampleDirectivesPipe implements PipeTransform {
+export class DecoratorPipe implements PipeTransform {
 
   transform(value: string, dec: string): string {
     return dec + value + dec;
