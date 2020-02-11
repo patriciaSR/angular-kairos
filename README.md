@@ -107,11 +107,11 @@ Amplia compatibilidad con los navegadores
 
 #### Resumen
 
-* Sigue y aprovecha todos los estándares web de la W3C con lo que no nos estamos casando con la tecnología.
-* Permite tener un código único y ejecutar en multidispositivos.
-* Tiene un rendimiento óptimo y es más simple y comprensible.
-* Permite tener todo nuestro código bajo una red de seguridad de tests y un marco de integración y despliegue continuo.
-* Su flexibilidad nos permite interacturar con cualquier tipo de dispositivo físico.
+- Sigue y aprovecha todos los estándares web de la W3C con lo que no nos estamos casando con la tecnología.
+- Permite tener un código único y ejecutar en multidispositivos.
+- Tiene un rendimiento óptimo y es más simple y comprensible.
+- Permite tener todo nuestro código bajo una red de seguridad de tests y un marco de integración y despliegue continuo.
+- Su flexibilidad nos permite interacturar con cualquier tipo de dispositivo físico.
 
 Vue es mucho más parecido a AngularJS y tiene un mejor uso para integrarlo dentro de un marco de una página estática.
 
@@ -366,14 +366,15 @@ Clase anotada con el decorador @Component. Obligatorio tiene que tener las propi
 
 Los componentes tienen un ciclo de vida del cual podemos hacer hook y meter código
 gracias a estas funciones que por defecto tenemos disponibles y que tienen que implementar cada una de las interfaces, entre paréntesis el nombre del método a implementar:
-* **OnChanges** (ngOnChanges): se llama cuando un valor de input modifica su valor. Recibe el objeto SimpleChange para recuperar el valor actual y el anterior.
-* **OnInit** (ngOnInit): se llama después del primer OnChanges y del constructor.
-* **DoCheck** (ngDoCheck): se lanza después de cambiar un valor o una dirección de memoria (se puede personalizar el change detection).
+
+- **OnChanges** (ngOnChanges): se llama cuando un valor de input modifica su valor. Recibe el objeto SimpleChange para recuperar el valor actual y el anterior.
+- **OnInit** (ngOnInit): se llama después del primer OnChanges y del constructor.
+- **DoCheck** (ngDoCheck): se lanza después de cambiar un valor o una dirección de memoria (se puede personalizar el change detection).
   - **AfterContentInit** (ngAfterContentInit): se llama justo después de inicializar el componente.
   - **AfterContentChecked** (ngAfterContentChecked): después de cada check del contenido del componente.
   - **AfterViewInit** (ngAfterViewInit): después de que la vista del componente haya sido inicializada.
   - **AfterViewChecked** (ngAfterViewChecked): después de cada check del contenido de la vista.
-* **OnDestroy** (ngOnDestroy): justo antes de que la vista haya sido destruida.
+- **OnDestroy** (ngOnDestroy): justo antes de que la vista haya sido destruida.
 
 Angular no cumple con el standar de los ciclos de vida, se han creado su propio ciclo de vida.
 Implementar código js dentro de OnInit() es el evento más utilizado. Se hacen las inicializaciones del componente. El constructor únicamente se deja para la inyección de dependencias.
@@ -468,8 +469,8 @@ Podemos recuperar el indice(index) y si es par(odd) o impar(even) y si es el úl
 
 **Mirar práctica**
 
-
 ### Pipes
+
 Los pipes se utilizan para hacer transformaciones sobre la forma de visualización de los datos en la vista.
 La logica de los pipes aplican solo a los templates y se utilizan para la transformación de datos dentro del template.
 
@@ -477,29 +478,41 @@ Hay muchos pipes implementados de serie. Todos ellos se encuentran el módulo Co
 
 Hay que poner el comando `|` y el nombre del pipe.
 
-#### DatePipe: date_expression | date[:format[:timezone[:locale]]] 
+#### DatePipe: date_expression | date[:format[:timezone[:locale]]]
+
 es utilizado para formatear fechas. Ejemplos:
+
 ```jsx
 {{today | date:'medium'}} //Oct 10, 2017, 5:33:09 PM
 {{today | date:'yyyy-MM-dd'}} //2017-10-10
 ```
 
-#### DecimalPipe: number_expression | number[:digitInfo[:locale]] 
+#### DecimalPipe: number_expression | number[:digitInfo[:locale]]
+
 para formatear variables de tipo number estableciendo el número de enteros y número mínimo y máximo de decimales.
-```jsx 
+
+```jsx
 {{34.676 | number:'2.0-2'}} //34.68
 ```
 
-#### UpperCasePipe/LowerCase/TitleCase: string | uppercase/lowercase/titlecase 
+#### UpperCasePipe/LowerCase/TitleCase: string | uppercase/lowercase/titlecase
+
 para poner en mayúsculas un texto.
+
 ```jsx
-{{'Texto de prueba' | uppercase}} //TEXTO DE PRUEBA
+{
+  {
+    "Texto de prueba" | uppercase;
+  }
+} //TEXTO DE PRUEBA
 ```
 
-#### I18nPluralPipe: expression | i18nPlural:mapping[:locale] 
+#### I18nPluralPipe: expression | i18nPlural:mapping[:locale]
+
 para ajustar el texto en base a la cardinalidad de un valor. Por ejemplo, cuando mostramos la cantidad de resultados y queremos un texto distinto en función del número de resultados devueltos.
 
-#### I18nSelectPipe: expression | i18nSelect:mapping 
+#### I18nSelectPipe: expression | i18nSelect:mapping
+
 para definir un objeto clave/valor y pintar por pantalla el valor que coincida con la clave. Es útil cuando queremos poner un texto distinto en base a si el usuario es hombre o mujer, por ejemplo.
 
 ```jsx
@@ -516,27 +529,36 @@ para definir un objeto clave/valor y pintar por pantalla el valor que coincida c
  {{genero | i18nSelect:generoMapping}} //Sr.
 ```
 
-#### JSONPipe: expression | json 
+#### JSONPipe: expression | json
+
 para pintar un objeto en formato json, útil en fase de depuración.
+
 ```jsx
-{{obj | json}}
+{
+  {
+    obj | json;
+  }
+}
 ```
 
-#### SlicePipe: array_or_string_expression | slice:start[:end] 
+#### SlicePipe: array_or_string_expression | slice:start[:end]
+
 para hacer subcadenas o subarrays.
 
-#### AsyncPipe: observable_or_promise_expression | async 
-para suscribirnos a un observable o una promesa y pintar el último valor emitido.
+#### AsyncPipe: observable_or_promise_expression | async
 
+para suscribirnos a un observable o una promesa y pintar el último valor emitido.
 
 Los pipes se pueden encadenar con el simbolo `|` uno detrás de otro siempre que sean compatibles
 
 #### Creación de pipes propios
+
 También puedes crear pipes propios. Si solo es una transformación de datos a nivel visual, es el momento de crear un pipe.
 
 Lo primero que tenemos que hacer es decorar la clase con el decorador @Pipe donde realizamos la definición de las propiedades del pipe:
-* **name**: será el nombre que identifique al pipe en el template de un componente.
-* **pure**: true (por defecto) si es stateless o false si es stateful.
+
+- **name**: será el nombre que identifique al pipe en el template de un componente.
+- **pure**: true (por defecto) si es stateless o false si es stateful.
 
 Ahora tenemos que crear una clase que implemente la interfaz PipeTransform y dentro del método transform ejecutar la lógica que queramos aplicar al valor, teniendo en cuenta que en el primer argumento vamos a recibir el valor al que queremos aplicar la transformación y en el segundo argumento y sucesivos, los parámetros de parametrización
 
@@ -553,96 +575,254 @@ En los imports solo van módulos. Solo se exportan componentes, pipes y directiv
 
 Se pueden usar variables declaradas en el componente para los argumentos de los pipes.
 
-
 ## Clase 2
 
 ### Data Binding
-el bidireccional usarlo con cuidado porque empeora el rendimiento.
-Tipos:
+
+Es el mecanismo de sincronización entre el modelo(lógica) y la vista(template). Angular tiene cuatro tipos
+de data binding: tres de una sola dirección (interpolation, property binding y event binding), y uno de doble dirección con la directiva ngModel.
+El binding bidireccional usarlo con cuidado porque empeora el rendimiento.
 
 #### Interpolación {{}}
 
+La forma más sencilla de mostrar un valor del modelo en el template del componente
+
 #### Property binding []
 
+Permite asignar valores a los elementos de la vista. Tres tipos:
+
 ##### Element property
+
 Bindear propiedades del HTML con variables declaradas en el componente. No poner interpolación después del =
+Nota: se prefiere utilizar la interpolación por simplicidad.
+
+```html
+<p [innerHTML]="'My favourite number is ' + myNumber"></p>
+```
 
 ##### Directive property
-ngIf, ngClass...
+
+ngIf, ngClass, style...
 Se pueden hacer también directivas propias
 
 ##### Component property (props, @Inputs)
+
 Transmitir info de componente padre a hijo. Props que se recogen dentro del componente como @Inputs
 
+```html
+--- Componente padre
+<person-detail [person]="currentPerson"></person-detail>
+--- Componente hijo
+```
+
+```js
+@Component({
+  selector: "person-detail",
+  template: `<p>{{person | json}}</p>`
+})
+export class PersonDetailComponent {
+  @Input() person: Person;
+}
+```
+
 #### Event binding ()
-nos permite manejar y crear eventos y asociarlo a métodos implementados en el componente.
-Emisión de eventos: se define un método que emite el evento al componente padre (this.evento.emit(info)) y pasa la información de hijo a padre a través de $event. El nuevo evento se declara como un @Output() = new EventEmitter()
 
+Define la comunicación desde la vista hacia el modelo. Es una comunicación que responde a alguna acción del usuario(click).
+Nos permite manejar y crear eventos y asociarlo a métodos implementados en el componente.
 
-dentro de father un boton y al hacer cick mostrar un alert
+```html
+<button (click)="onSave()">Salvar</button>
+```
 
-Práctica Pasos:
+También podemos manejar en el padre eventos propios generados por un componente hijo.
+Emisión de eventos: se define un método que emite el evento al componente padre (this.evento.emit(info)) y pasa la información de hijo a padre a través de \$event. El nuevo evento se declara como un @Output() = new EventEmitter()
+
+```html
+<person-detail (deleted)="onDeleted($event)"></person-detail> ---ts
+```
+
+```js
+export class PersonDetailComponent implements OnInit {
+  @Input() person: Person;
+  @Output() deleted = new EventEmitter();
+
+  ngOnInit() {
+    this.deleted.emit("Persona eliminada.");
+  }
+}
+```
+
+Nota importante: el valor que se le pasa a la función sea exactamente \$event ya que es el
+lugar donde Angular guarda el valor emitido por el EventEmitter.
+
+**Práctica Pasos:**
 Primero crear los @input y @output en el componente hijo
-Y en la etiqueta app-child es donde manejamos esos dos [message] y el evento que emite (reply)
+Y en la etiqueta <app-child> es donde manejamos esos dos [message] y el evento que emite (reply)
 
 Podemos implementarlo también en el ngOnChange en vez de tener un botón en el hijo. El OnChanges vigila los cambios que hay en los @Inputs()
 
 ### Servicios e Inyección de Dependencias
-Gracias a los Providers, que son los servicios que podemos inyectar dentro del constructor de cualquier componente.
+
+Servicio puede ser cualquier clase que implementemos que tenga funcionalidad transversal a los componentes, es decir, que queramos que su lógica sea utilizada por varios componentes u otros servicios. De hecho es buena práctica crear una capa de servicios con la lógica de negocio de tu aplicación que sea agnóstica al framework utilizado. Esto permite un mayor desacoplamiento entre clases, favoreciendo el testing unitario y de integración, con la ayuda de los dobles de pruebas; y el diseño con TDD.
+
+Los componentes deben tener la mínima lógica posible porque son muy difíciles de testear
+
+#### Elemento Inyector
+
+Se encarga de instanciar las dependencias para que puedan ser inyectadas a través del constructor de las clases.
+El injector principal se crea automáticamente en el proceso de arranque de la aplicación, y por cada clase decorada con @Component, @Directive, @Pipe o @Injectable, se crea un injector secundario que hereda las características de su padre. Se crea la jerarquía de inyectores para la resolución de dependencias.
 
 Elemento injector, crea los providers asociados con el elemento que pueden ser inyectados (@NgModule, @Component..)
+
+**Injector principal**
+En caso de que queramos que nuestro provider sea Singleton, es decir, tenga una única instancia y pueda ser inyectado en cualquier punto de la aplicación tenemos que declararlo en el inyector principal de la aplicación.
+
+**Injectores secundarios**
+En el caso de querer restringir la inyección del provider a una determinada parte de la aplicación, solo podemos declararlo en la propiedad providers de @Component o @Directive. Solo los elementos que cuelgan de este componente pueden hacer uso del provider.
 
 Los providers estan disponibles de todos los elementos que cuelgan del módulo donde hemos declarado el @Injectable().
 
 Y los providers secundarios que se creen solo estaran disponibles de los elementos que cuelguen de el, no en otros.
 
-De norma general los providers se declaran en el módulo principal (sigleton?¿) y así lo puede utilizar toda la aplicación
+De norma general los providers se declaran en el módulo principal (sigleton) y así lo puede utilizar toda la aplicación
 
 Siempre la localización de las dependencias va de abajo a arriba. Y si no lo encuentra da un error 'Not found provider'
 
 #### Declaración de Providers
-@Injectable({}) se genera cuando creo un servicio. y co el provideIn: 'root' ya decimos que se declara en el módulo principal (implementado a partir de Angular 6).
 
-Es la forma de sacar la lógica de nuestros componentes y que puedan ser reutilizados.
+Un provider es cada uno de los elementos que pueden ser inyectados en el elemento injector.
+@Injectable({}) se genera cuando creo un servicio. y con el provideIn: 'root' ya decimos que se declara en el módulo principal (implementado a partir de Angular 6).
+
+Para la definición del provider utilizamos un objeto donde indicamos dos propiedades, por un lado el token de acceso y por otro la receta para crear la instancia.
 
 Inyectamos el servicio en el constructor (private firstService: FirstService). Es como hacer una instancia de ese new que te crea por defecto Angular
 
-Los componentes deben tener la mínima lógica posible porque son muy difíciles de testear
-
 No provider for SecondService! --> Si no tenemos el provideIn: 'root', tenemos que declarar el servicio en el modulo de app/ o el que queramos dentro del array de providers.
 
-formas de declarar los providers:
-useclass --> directamente dentro del array de providers. Es una simplificación y Podemos usar el useClass para implementar servicios fake si quisieramos. Útil para el testing
-{provide: SecondService, useClass: SecondService} / {provide: SecondService, useClass: SecondServiceFake}
+##### Formas de declarar los providers:
 
-También podemos inyectar valores: useValue
-propiedades que queramos que estén disponibles para toda la app. valores de configuración. En este caso si que hay que usar el {} y para usarlo poner @Inject('token') private config: any dentro del constructor
+###### useClass
+
+Directamente dentro del array de providers. Es una simplificación de usar un objeto con las propiedades: provide y useClass, indicando en provide la instancia del servicio y en useClass que servicio la va a implementar. Esta sintaxis extendida es útil cuando la clase a implementar es distinta, como en los casos en lo que queremos cambiar la implementación, para crear un fake. Útil para el testing
+
+```js
+{provide: SecondService, useClass: SecondService} / {provide: SecondService, useClass: SecondServiceFake}
+```
+
+Para poder hacer uso de la instancia de la clase utilizamos el decorador @Inject en el constructor de cualquier elemento, que tenga acceso, indicando el token de localización, es decir, el nombre de la clase.
+
+```js
+constructor(@Inject(HelloService) private helloService:HelloService)
+```
+
+Desde Angular 5 este @Inject() ya no hace falta, existe una simplificación SOLO para el caso de la inyección de servicios
+
+```js
+constructor(private otherService:OtherService){}
+```
+
+###### useValue
+
+Cuando lo que queremos es poder compartir un determinado valor u objeto de forma estática, hacemos uso de la receta useValue.
+Variables que queramos que estén disponibles para toda la app. valores de configuración. En este caso si que hay que usar siempre el {provide, useValue} y para usarlo poner @Inject('token') private config: any dentro del constructor. En este caso en la propiedad provide establecemos un string que será utilizado como token para la localización del provider y en useValue establecemos el valor que queramos.
+
+```js
+providers: [{ provide: "App.config", useValue: config }];
+```
+
+Uso del decorador @Inject indicando el token de localización para establecer el valor en el identificador
+y poder hacer uso en la lógica del elemento.
+
+```js
+constructor(@Inject('App.config') private config){}
+```
 
 #### Router
-simular el cambio de página en nuestra app
+
+El router es el elemento que se encarga de definir todas las potenciales vistas de la aplicación permitiendo cambiar la vista principal de la aplicación en base a las interacciones del usuario, simulando de esta forma la navegación entre páginas dentro de una aplicación SPA.
 Hay que definir las rutas de la app y relacionar las rutas con los componentes que tiene que renderizar.
 
 Se define un objeto ROUTES en el módulo principal
 
-** para cuando no encuentre ninguna ruta, lo que hará es un redirectTo:'' y pathMatch: 'full' para una ruta positiva.
-Y esas routas se pasan a traves de los imports con Module.forRoot(ROUTES),
+Se define '' y '\*\*' Para cuando no encuentre ninguna ruta, lo que hará es un redirectTo:'home' y pathMatch: 'full' para pasar siempre una ruta positiva.
+Y esas routas se pasan a traves de los imports con RouteModule.forRoot(ROUTES)
 
-para definir un componente en módulos secundarios, se defie las ROUTES en los modulos secundarios que se va a mostrar ponemos en el objeot de ROUTES el component: Component y en el import se pone .forChild(ROUTES)
+Para definir los componentes que se renderizan en módulos secundarios, se defie las ROUTES en los modulos secundarios que se va a mostrar ponemos en el objeto de ROUTES el component: Component y en el import se pone RouteModule.forChild(ROUTES)
 
-##### Configuración del Lazzy Loading
+##### Configuración con Lazzy Loading
+
 Hay que :
-Tener modulos secundarios
-Y sacarlos del modulo principal y cargarlos a través del router
+Tener modulos secundarios y sacarlos del modulo principal para cargarlos solo a través del router
 cambiar los path, porque ahora los secundarios serán '' y '/:id' y en el router del módulo principal ponemos los path principales directives y databinding
 
-El orden importa, poner las rutas entre los redirect de vacío y el ** y utilizamos el loadChildren:'routedelmodulo' o con una arrow function y un import('path del modulo').then() y borramos los módulos secundarios del imports del app module. y así solo se cargará el módulo al que apunta el path.
+**El orden importa**, poner las rutas entre los redirect de vacío '' y el '\*\*' y utilizamos el loadChildren:'routedelmodulo#NameModule' o con una arrow function y un import('path del modulo').then() y borramos los módulos secundarios del imports del app module. y así solo se cargará el módulo al que apunta el path.
+
+```js
+---Módulo Secundario
+import { Routes, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
+const ROUTES: Routes = [
+  { path:'', component: TutorialesComponent },
+  { path:':id', component: TutorialDetailComponent }
+];
+
+@NgModule({imports: [CommonModule, RouterModule.forChild(ROUTES)]})
+ export class TutorialesModule {}
+
+---Módulo Principal
+import { Routes, RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+const ROUTES: Routes = [
+  { path: '', redirectTo: 'tutoriales', pathMatch: 'full' },
+  { path: 'tutoriales', loadChildren: './tutoriales.module#TutorialesModule'},
+  { path: 'tutoriales', loadChildren: () => import('./tutoriales.module').then(m => m.TutorialesModule)},
+  { path: '**', redirecTo: 'tutoriales'}
+];
+ @NgModule({imports: [BrowserModule, RouterModule.forRoot(ROUTES)]})
+ export class AppModule {}
+```
+
+De este modo cuando un usuario haga uso de la aplicación, primero se cargará el bundle principal de forma muy rápida y acto seguido un nuevo fichero con el contenido del módulo de tutoriales.
+
+Nota: es importante tener en cuenta que la resolución del router va en orden desde arriba hacia abajo, por tanto no podríamos poner la ruta de los ‘\*\*’ antes que el resto de rutas, ésta siempre tiene que ir la última y el ‘’ la primera.
 
 ##### Inyección del router
-routr ya es provider por defecto declarado por angular. Lo podemos utilizar en la lógica de nuestros componentes utilizandolo como thi.router.navigate(['path])
+
+El router ya es provider por defecto declarado por angular. Lo podemos utilizar en la lógica de nuestros componentes utilizandolo como thi.router.navigate(['path])
 
 un servicio que te lleve de databinding a directivas
 
+##### Router outlet y router links
 
+El router outlet es la directiva que Angular utiliza para identificar áreas de renderizado en la aplicación, mientras que, el router link es la directiva que hay que utilizar para que Angular sepa montar los enlaces a las distintas rutas.
+
+El router outlet es lo que estará en el template del componente principal App
+
+```html
+<nav>
+  <a [routerLink]="['tutoriales']">Tutoriales</a>
+</nav>
+
+<router-outlet></router-outlet>
+```
+
+##### Navegación desde código
+
+Los router links no son la única forma de poder cargar una u otra ruta, esto también lo podemos hacer desde la lógica de cualquier componente, como vemos a continuación:
+
+```js
+import { Router } from '@angular/router';
+
+export class TutorialesComponent {
+constructor(private router: Router) { }
+  onSelect(tutorial: Tutorial) {
+    this.router.navigate( ['tutoriales', tutorial.id]);
+  }
+}
+```
+
+Esta lógica estaría dentro del componente “TutorialesComponent” y lo que permite es que cuando el usuario pulse sobre un elemento de la lista, se dispare el evento onSelect con la información del tutorial que ha pulsado para transmitirla mediante la función “navigate” del router a la vista del detalle que como admite el paso de un id, se lo establecemos como segundo elemento del array, de forma que cuando se produzca este evento se renderice en el router-outlet el componente de detalle con la información que se obtenga a partir de su id.
 
 
 
