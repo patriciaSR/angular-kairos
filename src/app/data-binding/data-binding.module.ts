@@ -5,7 +5,7 @@ import { ChildComponent } from './child/child.component';
 import { FatherComponent } from './father/father.component';
 
 const ROUTES: Routes = [
-  { path: 'databinding', component: FatherComponent},
+  { path: '', component: FatherComponent},
 ];
 
 

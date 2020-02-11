@@ -5,7 +5,7 @@ import { PipesModule } from '../pipes/pipes.module';
 import { ExampleDirectivesComponent } from './example-directives/example-directives.component';
 
 const ROUTES: Routes = [
-  { path: 'directives', component: ExampleDirectivesComponent},
+  { path: '', component: ExampleDirectivesComponent},
 ];
 
 

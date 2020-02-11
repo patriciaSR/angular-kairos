@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import { DataBindingModule } from './data-binding/data-binding.module';
-import { DirectivesModule } from './directives/directives.module';
 import { SecondServiceFake } from './second-fake.service copy';
 import { SecondService } from './second.service';
 
@@ -13,7 +11,9 @@ const config = {
 
 const ROUTES: Routes = [
   { path: '', redirectTo: 'directives', pathMatch: 'full' },
-  { path: '**', redirectTo: ''}
+  { path: 'directives', loadChildren: () => import('./directives/directives.module').then(m => m.DirectivesModule) },
+  { path: 'databinding', loadChildren: () => import('./data-binding/data-binding.module').then(m => m.DataBindingModule) },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
@@ -22,8 +22,8 @@ const ROUTES: Routes = [
   ],
   imports: [
     BrowserModule,
-    DirectivesModule,
-    DataBindingModule,
+    // DirectivesModule,
+    // DataBindingModule,
     RouterModule.forRoot(ROUTES)
   ],
   providers: [

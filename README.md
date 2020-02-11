@@ -629,6 +629,18 @@ Y esas routas se pasan a traves de los imports con Module.forRoot(ROUTES),
 
 para definir un componente en módulos secundarios, se defie las ROUTES en los modulos secundarios que se va a mostrar ponemos en el objeot de ROUTES el component: Component y en el import se pone .forChild(ROUTES)
 
+##### Configuración del Lazzy Loading
+Hay que :
+Tener modulos secundarios
+Y sacarlos del modulo principal y cargarlos a través del router
+cambiar los path, porque ahora los secundarios serán '' y '/:id' y en el router del módulo principal ponemos los path principales directives y databinding
+
+El orden importa, poner las rutas entre los redirect de vacío y el ** y utilizamos el loadChildren:'routedelmodulo' o con una arrow function y un import('path del modulo').then() y borramos los módulos secundarios del imports del app module. y así solo se cargará el módulo al que apunta el path.
+
+##### Inyección del router
+routr ya es provider por defecto declarado por angular. Lo podemos utilizar en la lógica de nuestros componentes utilizandolo como thi.router.navigate(['path])
+
+un servicio que te lleve de databinding a directivas
 
 
 
