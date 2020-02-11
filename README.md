@@ -579,6 +579,12 @@ nos permite manejar y crear eventos y asociarlo a métodos implementados en el c
 Emisión de eventos: se define un método que emite el evento al componente padre (this.evento.emit(info)) y pasa la información de hijo a padre a través de $event. El nuevo evento se declara como un @Output() = new EventEmitter()
 
 
+dentro de father un boton y al hacer cick mostrar un alert
+
+Práctica Pasos:
+Primero crear los @input y @output en el componente hijo
+Y en la etiqueta app-child es donde manejamos esos dos [message] y el evento que emite (reply)
+
 
 
 

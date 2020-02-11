@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FatherComponent implements OnInit {
 
+  messageToChild: string;
+  messageFromChild: string;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onClick() {
+    return this.messageToChild = 'Hola hijo';
+  }
+
+  getMessage(event) {
+    this.messageFromChild = event;
   }
 
 }

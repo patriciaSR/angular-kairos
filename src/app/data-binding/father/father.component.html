@@ -1,3 +1,10 @@
 
 <h2>Data Binding</h2>
-<p>father works!</p>
+<p>father works!!</p>
+<button (click)="onClick()"> Hello Child!!!</button>
+
+<p>{{ messageFromChild }}</p>
+
+<app-child [message]="messageToChild" (reply)="getMessage($event)"></app-child>
+
+
