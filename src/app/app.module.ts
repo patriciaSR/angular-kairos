@@ -13,7 +13,7 @@ const config = {
 
 const ROUTES: Routes = [
   { path: '', redirectTo: 'directives', pathMatch: 'full' },
-  { path: '**', redirectTo: 'directives'}
+  { path: '**', redirectTo: ''}
 ];
 
 @NgModule({
