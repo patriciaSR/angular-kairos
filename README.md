@@ -585,6 +585,56 @@ Práctica Pasos:
 Primero crear los @input y @output en el componente hijo
 Y en la etiqueta app-child es donde manejamos esos dos [message] y el evento que emite (reply)
 
+Podemos implementarlo también en el ngOnChange en vez de tener un botón en el hijo. El OnChanges vigila los cambios que hay en los @Inputs()
+
+### Servicios e Inyección de Dependencias
+Gracias a los Providers, que son los servicios que podemos inyectar dentro del constructor de cualquier componente.
+
+Elemento injector, crea los providers asociados con el elemento que pueden ser inyectados (@NgModule, @Component..)
+
+Los providers estan disponibles de todos los elementos que cuelgan del módulo donde hemos declarado el @Injectable().
+
+Y los providers secundarios que se creen solo estaran disponibles de los elementos que cuelguen de el, no en otros.
+
+De norma general los providers se declaran en el módulo principal (sigleton?¿) y así lo puede utilizar toda la aplicación
+
+Siempre la localización de las dependencias va de abajo a arriba. Y si no lo encuentra da un error 'Not found provider'
+
+#### Declaración de Providers
+@Injectable({}) se genera cuando creo un servicio. y co el provideIn: 'root' ya decimos que se declara en el módulo principal (implementado a partir de Angular 6).
+
+Es la forma de sacar la lógica de nuestros componentes y que puedan ser reutilizados.
+
+Inyectamos el servicio en el constructor (private firstService: FirstService). Es como hacer una instancia de ese new que te crea por defecto Angular
+
+Los componentes deben tener la mínima lógica posible porque son muy difíciles de testear
+
+No provider for SecondService! --> Si no tenemos el provideIn: 'root', tenemos que declarar el servicio en el modulo de app/ o el que queramos dentro del array de providers.
+
+formas de declarar los providers:
+useclass --> directamente dentro del array de providers. Es una simplificación y Podemos usar el useClass para implementar servicios fake si quisieramos. Útil para el testing
+{provide: SecondService, useClass: SecondService} / {provide: SecondService, useClass: SecondServiceFake}
+
+También podemos inyectar valores: useValue
+propiedades que queramos que estén disponibles para toda la app. valores de configuración. En este caso si que hay que usar el {} y para usarlo poner @Inject('token') private config: any dentro del constructor
+
+#### Router
+simular el cambio de página en nuestra app
+Hay que definir las rutas de la app y relacionar las rutas con los componentes que tiene que renderizar.
+
+Se define un objeto ROUTES en el módulo principal
+
+** para cuando no encuentre ninguna ruta, lo que hará es un redirectTo:'' y pathMatch: 'full' para una ruta positiva.
+Y esas routas se pasan a traves de los imports con Module.forRoot(ROUTES),
+
+para definir un componente en módulos secundarios, se defie las ROUTES en los modulos secundarios que se va a mostrar ponemos en el objeot de ROUTES el component: Component y en el import se pone .forChild(ROUTES)
+
+
+
+
+
+
+
 
 
 

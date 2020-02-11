@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirstService } from 'src/app/first.service';
 
 @Component({
   selector: 'app-father',
@@ -10,13 +11,13 @@ export class FatherComponent implements OnInit {
   messageToChild: string;
   messageFromChild: string;
 
-  constructor() { }
+  constructor(private firstService: FirstService) { }
 
   ngOnInit(): void {
   }
 
   onClick() {
-    return this.messageToChild = 'Hola hijo';
+    return this.messageToChild = this.firstService.getMessage();
   }
 
   getMessage(event) {
