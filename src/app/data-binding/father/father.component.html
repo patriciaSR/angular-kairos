@@ -1,15 +1,17 @@
+<div style="background-color: aquamarine;">
+  <h2>Data Binding</h2>
+  <p>father works!!</p>
+  <button (click)="onClick()"> Hello Child!!!</button>
 
-<h2>Data Binding</h2>
-<p>father works!!</p>
-<button (click)="onClick()"> Hello Child!!!</button>
-
-<button (click)="goDirectives()" style="display: block;"> Go to Directives >> </button>
+  <button (click)="goDirectives()" style="display: block;"> Go to Directives >> </button>
 
 
-<p>{{ messageFromChild }}</p>
+  <p>{{ messageFromChild }}</p>
+</div>
+
 
 <hr>
 
-<app-child [message]="messageToChild" (reply)="getMessage($event)"></app-child>
-
-
+<div style="background-color: rgb(251, 127, 255);">
+  <app-child [message]="messageToChild" (reply)="getMessage($event)"></app-child>
+</div>
