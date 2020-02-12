@@ -837,7 +837,18 @@ query params
 no pertenecen a la url, lo que hay a continuación de la ?. pasan información tb.
 objeto json dentro del enlace.
 
+Subscribes() para suscribirse a los cambios de los queryparams sin necesidad de refrescar la página.
 
+rutas de guarda
+impedir salir de un componente o permitir renderizarlo.
+CanActivate
+CanDeactivate
+Se implementan como servicios (@injectable()) que implementa estos dos CanX,
+implementamos el método canActivate dentro y devolvemos un boolean segun si se cumplen las condiciones que hemos metido dentro.
+
+Como aplicar el injectable al router, dentro del path que queramos proteger, con canActivate[nombredelainstanciadelservicio]
+
+crear un módulo auth, dentro un servicio auth.service -> recupera el token del lcstorage y si existe true y si no no.
 
 
 

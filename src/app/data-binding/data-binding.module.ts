@@ -5,8 +5,8 @@ import { ChildComponent } from './child/child.component';
 import { FatherComponent } from './father/father.component';
 
 const ROUTES: Routes = [
-  { path: '', component: FatherComponent},
-  { path: ':child', component: ChildComponent},
+  { path: '', component: FatherComponent },
+  { path: ':child', component: ChildComponent },
 ];
 
 
