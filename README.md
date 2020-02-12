@@ -842,13 +842,30 @@ Subscribes() para suscribirse a los cambios de los queryparams sin necesidad de 
 rutas de guarda
 impedir salir de un componente o permitir renderizarlo.
 CanActivate
-CanDeactivate
 Se implementan como servicios (@injectable()) que implementa estos dos CanX,
 implementamos el método canActivate dentro y devolvemos un boolean segun si se cumplen las condiciones que hemos metido dentro.
 
-Como aplicar el injectable al router, dentro del path que queramos proteger, con canActivate[nombredelainstanciadelservicio]
+Como aplicar el injectable al router, dentro del path que queramos proteger, con canActivate:[nombredelainstanciadelservicio]
 
 crear un módulo auth, dentro un servicio auth.service -> recupera el token del lcstorage y si existe true y si no no.
+
+CanDeactivate
+No permite salir del componente ante una determinada situación. Esta solo se aplica a componentes.
+Se implementa un servicio con CanDeactivate<ComponenteAlQueAplica>
+Implementamos el método dentro y devuelve un booleano, con un confirm() === alert(), que te permite decir si sí(true) o no(false)
+
+Como aplicar el injectable al router, dentro del path que queramos proteger, con canDeactivate:[nombredelainstanciadelservicio]
+
+
+Si tenemos más de un componente, para que sea genérico, crear una interface en el service que tb implementa el método canDeactivate y devuelve un boolean, y así poder decirle al service en vez de un componente solo, pasarle la interfaz.
+
+y los componentes donde lo quieras usar hay que implementar la interfaz CanComponentDeactivate y dentro implementas la lógica de lo que quieras mostrar.
+
+siempre implementar en la ruta con un componente
+
+
+en el componente hijo, dar a un botón de guardar y si no se ha pulsado y se intenta a navegar a otro sitio que te salga un confirm.
+dentro de auth confirmService con la interfaz y en el componente child implementa la interfaz.
 
 
 
