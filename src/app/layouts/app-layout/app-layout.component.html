@@ -1,0 +1,9 @@
+<p>app-layout works!</p>
+
+<nav>
+  <a [routerLink]="['/directives']">Directives/ </a>
+  <a [routerLink]="['/databinding']">DataBinding/ </a>
+  <a [routerLink]="['/databinding/child']" [queryParams]="{message:'hola'}">Child</a>
+</nav>
+
+<router-outlet></router-outlet>

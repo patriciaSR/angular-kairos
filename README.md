@@ -828,7 +828,7 @@ Esta lógica estaría dentro del componente “TutorialesComponent” y lo que p
 ## Clase 3
 
 ##### Recuperar información del router
-a través del servicio activateRoute que se inyecta en el constructor.
+La información, ya sea transmitida a través de la directiva router-link o a través de la función navigate del servicio Router, puede ser recuperada gracias al servicio “ActivatedRoute” que se inyecta en el constructor del componente donde queramos recuperar la información del router.
 
 configurar la ruta para que admita un param y recuperarlo en el hijo y mostrarlo en el template
 
@@ -863,13 +863,23 @@ y los componentes donde lo quieras usar hay que implementar la interfaz CanCompo
 
 siempre implementar en la ruta con un componente
 
-
+Práctica:
 en el componente hijo, dar a un botón de guardar y si no se ha pulsado y se intenta a navegar a otro sitio que te salga un confirm.
 dentro de auth confirmService con la interfaz y en el componente child implementa la interfaz.
 
+##### Rutas anidadas
+uso de más router-outlet
+un componente que dentro tiene un router-outlet(Layout/view), todos los paths + componentes que defina dentro de children van a ir asociados a ese componente padre con el router-outlet
+Ej: layout de home y layout de login
 
 
+crear un modulo que guarda los componentes de layouts
 
+
+databinding y directivas van a app
+y login va a estar en simple
+
+Acordarse de poner en el routerLink que parta siempre de / para ser más deterministas!!!!
 
 
 
