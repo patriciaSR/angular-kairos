@@ -745,13 +745,13 @@ Hay que definir las rutas de la app y relacionar las rutas con los componentes q
 Se define un objeto ROUTES en el módulo principal
 
 Se define '' y '\*\*' Para cuando no encuentre ninguna ruta, lo que hará es un redirectTo:'home' y pathMatch: 'full' para pasar siempre una ruta positiva.
-Y esas routas se pasan a traves de los imports con RouteModule.forRoot(ROUTES)
+Y esas routas se pasan a traves de los imports con **RouteModule.forRoot(ROUTES)**
 
-Para definir los componentes que se renderizan en módulos secundarios, se defie las ROUTES en los modulos secundarios que se va a mostrar ponemos en el objeto de ROUTES el component: Component y en el import se pone RouteModule.forChild(ROUTES)
+Para definir los componentes que se renderizan en módulos secundarios, se defie las ROUTES en los modulos secundarios que se va a mostrar ponemos en el objeto de ROUTES el component: Component y en el import se pone **RouteModule.forChild(ROUTES)**
 
 ##### Configuración con Lazzy Loading
 
-Hay que :
+Es lo mejor, salvo que la app sea muy pequeña. Hay que:
 Tener modulos secundarios y sacarlos del modulo principal para cargarlos solo a través del router
 cambiar los path, porque ahora los secundarios serán '' y '/:id' y en el router del módulo principal ponemos los path principales directives y databinding
 
@@ -815,14 +815,34 @@ Los router links no son la única forma de poder cargar una u otra ruta, esto ta
 import { Router } from '@angular/router';
 
 export class TutorialesComponent {
-constructor(private router: Router) { }
-  onSelect(tutorial: Tutorial) {
-    this.router.navigate( ['tutoriales', tutorial.id]);
-  }
+
+  constructor(private router: Router) { }
+    onSelect(tutorial: Tutorial) {
+      this.router.navigate( ['tutoriales', tutorial.id]);
+    }
 }
 ```
 
 Esta lógica estaría dentro del componente “TutorialesComponent” y lo que permite es que cuando el usuario pulse sobre un elemento de la lista, se dispare el evento onSelect con la información del tutorial que ha pulsado para transmitirla mediante la función “navigate” del router a la vista del detalle que como admite el paso de un id, se lo establecemos como segundo elemento del array, de forma que cuando se produzca este evento se renderice en el router-outlet el componente de detalle con la información que se obtenga a partir de su id.
+
+## Clase 3
+
+##### Recuperar información del router
+a través del servicio activateRoute que se inyecta en el constructor.
+
+configurar la ruta para que admita un param y recuperarlo en el hijo y mostrarlo en el template
+
+
+query params
+no pertenecen a la url, lo que hay a continuación de la ?. pasan información tb.
+objeto json dentro del enlace.
+
+
+
+
+
+
+
 
 
 
