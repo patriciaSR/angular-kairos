@@ -828,65 +828,191 @@ Esta lógica estaría dentro del componente “TutorialesComponent” y lo que p
 ## Clase 3
 
 ##### Recuperar información del router
+
+###### params
+
 La información, ya sea transmitida a través de la directiva router-link o a través de la función navigate del servicio Router, puede ser recuperada gracias al servicio “ActivatedRoute” que se inyecta en el constructor del componente donde queramos recuperar la información del router.
 
-configurar la ruta para que admita un param y recuperarlo en el hijo y mostrarlo en el template
+Dentro del objeto snapshot se almacena un array con los parámetros de la URL, los cuales podemos recuperar a través del nombre de la variable.
 
+```js
+// si la ruta es 'home/:id'
+constructor(private activatedRoute: ActivatedRoute) { }
 
-query params
-no pertenecen a la url, lo que hay a continuación de la ?. pasan información tb.
-objeto json dentro del enlace.
+ngOnInit() {
+  const id = this.activatedRoute.snapshot.params.id;
+}
+```
 
-Subscribes() para suscribirse a los cambios de los queryparams sin necesidad de refrescar la página.
+###### query params
 
-rutas de guarda
-impedir salir de un componente o permitir renderizarlo.
-CanActivate
-Se implementan como servicios (@injectable()) que implementa estos dos CanX,
-implementamos el método canActivate dentro y devolvemos un boolean segun si se cumplen las condiciones que hemos metido dentro.
+Los query params se usan para definir parámetros que son opcionales, es decir, que no van a formar parte del path si no que se van a añadir a partir del símbolo “?” en la URL. Estos parámetros pueden transmitirse a través de la directiva router-link. Para pasar información a través de la url.
 
-Como aplicar el injectable al router, dentro del path que queramos proteger, con canActivate:[nombredelainstanciadelservicio]
+```html
+<a [routerLink]="['/state']" [queryParams]="{param:1}">State</a>
+```
 
-crear un módulo auth, dentro un servicio auth.service -> recupera el token del lcstorage y si existe true y si no no.
+o si navegamos a través de métodos:
 
-CanDeactivate
-No permite salir del componente ante una determinada situación. Esta solo se aplica a componentes.
+```js
+ngOnInit() {
+  this.router.navigate(['/state'], {queryParams: {param:1}});
+}
+```
+
+Para recuperarlos hacemos uso del servicio ActivatedRoute para acceder a ellos a través de identificador en el objeto snapshot, pero en este caso se encuentran en el objeto queryParams.
+
+```js
+ngOnInit() {
+  this.param = this.actRoute.snapshot.queryParams.param;
+}
+```
+
+Para solucionar el problema del renderizado del componente, porque el onInit solo se ejecuta una vez, hay que recurrir a la programación reactiva permitiendo subscribirnos tanto a los cambios en params como en queryparams de la url, sin necesidad de tener que refrescar la página para ver los cambios:
+
+```js
+ngOnInit() {
+  this.activateRoute.queryParams.subscribe((queryParams) => {
+    this.param = queryParams['param'];
+  });
+}
+```
+
+#### Rutas de guarda
+
+Caracteristica del ruter para analizar si tenemos permiso para ver/renderizar el componente que se corresponde con la URL (activar la ruta, CanActivate) o si tenemos permisos para salir del componente hacia otra ruta (desactivar la ruta,CanDeactivate).
+
+##### CanActivate
+
+Muy util para cuando el usuario tenga que cumplir cierta condición (rol o estar logueado)
+Se implementa como servicio (@Injectable()) y dentro definimos la lógica del método canActivate y devolvemos siempre un booleano (true, dejas que se pinte el componente; false no y reenderizas a otra página como login), segun se cumplan o no las condiciones que hemos puesto.
+
+```js
+@Injectable()
+
+export class AuthService implements CanActivate {
+
+constructor(private router: Router) {}
+  canActivate(route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot): boolean {
+
+    const token = localStorage.getItem('token');
+
+    if (isValidToken(token)) {
+      return true;
+    } else {
+      this.router.navigateByUrl('/login', {queryParams: {returnUrl: state.url}});
+      return false;
+    }
+  }
+}
+```
+
+Para salvaguardar una ruta con este servicio simplemente tenemos que indicarlo en la configuración de la ruta, de esta forma (aplicar el injectable al router, dentro del path que queramos proteger):
+
+```js
+{path: 'ruta-protegida', component: SecretoComponent, canActivate [AuthService]}
+```
+
+##### CanDeactivate
+
+Cuando no permitimos salir del componente ante una determinada situación. Esta solo se aplica a componentes.
+
 Se implementa un servicio con CanDeactivate<ComponenteAlQueAplica>
 Implementamos el método dentro y devuelve un booleano, con un confirm() === alert(), que te permite decir si sí(true) o no(false)
 
 Como aplicar el injectable al router, dentro del path que queramos proteger, con canDeactivate:[nombredelainstanciadelservicio]
 
-
-Si tenemos más de un componente, para que sea genérico, crear una interface en el service que tb implementa el método canDeactivate y devuelve un boolean, y así poder decirle al service en vez de un componente solo, pasarle la interfaz.
+Pero esto sería si tenemos solo un componente. Si tenemos más de un componente, para que sea genérico, hay que crear una interface en el service que también implementa el método canDeactivate y devuelve un boolean, y así poder decirle al service en vez de un componente solo, pasarle la interfaz.
 
 y los componentes donde lo quieras usar hay que implementar la interfaz CanComponentDeactivate y dentro implementas la lógica de lo que quieras mostrar.
 
-siempre implementar en la ruta con un componente
+Siempre implementar en la ruta el CanDeactivate con un componente asociado.
+
+```js
+export interface CanComponentDeactivate {
+  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
+
+@Injectable()
+export class ConfirmService implements CanDeactivate<CanComponentDeactivate> {
+  constructor() {}
+
+  canDeactivate(
+    component: CanComponentDeactivate,
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot
+  ) {
+    return component.canDeactivate ? component.canDeactivate() : true;
+  }
+}
+```
+
+Ahora el componente que quiera verificar su estado antes de salir de la ruta, tiene que implementar la interfaz CanComponentDeactivate que le obliga a implementar el método canDeactivate con la lógica que requiera.
+
+```js
+export class DataBindingChildExampleComponent implements OnInit, CanComponentDeactivate {
+  saved: boolean;
+
+  constructor() { }
+  
+  ngOnInit() {
+    this.saved = false;
+  }
+  save() {
+    this.saved = true;
+  }
+  canDeactivate(): boolean {
+    if (saved) {
+      return true;
+    } else {
+      return confirm('Seguro que quieres salir sin guardar');
+    }
+  }
+}
+```
+
+
 
 Práctica:
 en el componente hijo, dar a un botón de guardar y si no se ha pulsado y se intenta a navegar a otro sitio que te salga un confirm.
 dentro de auth confirmService con la interfaz y en el componente child implementa la interfaz.
 
 ##### Rutas anidadas
-uso de más router-outlet
-un componente que dentro tiene un router-outlet(Layout/view), todos los paths + componentes que defina dentro de children van a ir asociados a ese componente padre con el router-outlet
+Nos permite definir rutas de forma anidada para construir un árbol de jerarquía en nuestras aplicaciones; de forma que podemos establecer nuevos espacios de renderizado (router-outlet) anidados a componentes que ya se visualizaron en su propio router-outlet
+
+Un componente que dentro tiene un router-outlet(Layout/view), todos los paths + componentes que defina dentro de children van a ir asociados a ese componente padre con el router-outlet
 Ej: layout de home y layout de login
-
-
-crear un modulo que guarda los componentes de layouts
-
-
-databinding y directivas van a app
-y login va a estar en simple
 
 Acordarse de poner en el routerLink que parta siempre de / para ser más deterministas!!!!
 
-
-
-
-
-
-
+```js
+const ROUTES: Routes = [
+  {
+    path: '',
+    component: AppHomeComponent,
+    canActivate: [AuthGuardService],
+    children: [
+      {
+        path: '',
+        component: HomeDefaultComponent
+      }
+    ]
+  },
+  {
+    path: '',
+    component: SimpleLayoutComponent,
+    children: [
+      {
+        path: 'login',
+        component: AppLoginComponent
+      }
+    ]
+  },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
+];
+```
 
 ## Development server
 
@@ -911,3 +1037,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+```
+
+```
