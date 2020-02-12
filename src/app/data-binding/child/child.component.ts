@@ -16,7 +16,13 @@ export class ChildComponent implements OnInit {
 
   ngOnInit(): void {
     this.child = this.activatedRoute.snapshot.params.child;
-    this.param = this.activatedRoute.snapshot.queryParams.message;
+    // this.param = this.activatedRoute.snapshot.queryParams.message;
+
+    // subscribe a los cambios del queryparams
+    this.activatedRoute.queryParams.subscribe((queryParams) => {
+      this.param = queryParams.message;
+    });
+
 
   }
 
