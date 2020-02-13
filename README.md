@@ -31,7 +31,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
    - [Formularios](#Formularios)
 
 5. [Clase 5](#Clase-5)
-   - [HTTP: comunicación con el servidor](#Http:-comunicación-con-servidor-remoto)
+   - [HTTP: comunicación con el servidor](#Http-comunicación-con-servidor-remoto)
 
 ## Clase 1
 
