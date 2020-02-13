@@ -4,28 +4,28 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Indice
 
-1. [Clase 1](#-Clase-1)
-    - [¿Por qué Angular](#-¿Por-qué-Angular?) 
-    - [Entorno de Desarrollo](#-Entorno-de-desarrollo) 
-    - [Ejecución del Proyecto](#-Ejecución-del-Proyecto) 
-    - [Módulos](#-Módulos-en-Angular) 
-    - [Arranque de la App](#-Arranque-de-la-app)
-    - [Módulos secundarios](#-Módulos-secundarios)
-    - [Directivas](#-Directivas-en-angular)
-    - [Pipes](#-Pipes-en-angular)
+1. [Clase 1](#Clase-1)
+    - [¿Por qué Angular](#¿Por-qué-Angular?) 
+    - [Entorno de Desarrollo](#Entorno-de-desarrollo) 
+    - [Ejecución del Proyecto](#Ejecución-del-Proyecto) 
+    - [Módulos](#Módulos-en-Angular) 
+    - [Arranque de la App](#Arranque-de-la-app)
+    - [Módulos secundarios](#Módulos-secundarios)
+    - [Directivas](#Directivas-en-angular)
+    - [Pipes](#Pipes-en-angular)
 
-2. [Clase 2](#-Clase-2)
-    - [Data Binding](#-Data-Binding)
-    - [Servicios e Inyección de Dependencias](#-Servicios-e-Inyección-de-Dependencias)
-    - [Router](#-Router)
+2. [Clase 2](#Clase-2)
+    - [Data Binding](#Data-Binding)
+    - [Servicios e Inyección de Dependencias](#Servicios-e-Inyección-de-Dependencias)
+    - [Router](#Router)
 
-3. [Clase 3](#-Clase-3)
-    - [Recuperar información del router](#-Recuperar-información-del-router)
-    - [Rutas de guarda](#-Rutas-de-guarda)
-    - [Rutas anidadas](#-Rutas-anidadas)
+3. [Clase 3](#Clase-3)
+    - [Recuperar información del router](#Recuperar-información-del-router)
+    - [Rutas de guarda](#Rutas-de-guarda)
+    - [Rutas anidadas](#Rutas-anidadas)
 
-4. [Clase 4](#-Clase-4)
-    - [Formularios](#-Formularios)
+4. [Clase 4](#Clase-4)
+    - [Formularios](#Formularios)
 
 
 ## Clase 1
