@@ -5,28 +5,33 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Indice
 
 1. [Clase 1](#Clase-1)
-    - [¿Por qué Angular](#¿Por-qué-Angular?) 
-    - [Entorno de Desarrollo](#Entorno-de-desarrollo) 
-    - [Ejecución del Proyecto](#Ejecución-del-Proyecto) 
-    - [Módulos](#Módulos-en-Angular) 
-    - [Arranque de la App](#Arranque-de-la-app)
-    - [Módulos secundarios](#Módulos-secundarios)
-    - [Directivas](#Directivas-en-angular)
-    - [Pipes](#Pipes-en-angular)
+
+   - [¿Por qué Angular](#¿Por-qué-Angular?)
+   - [Entorno de Desarrollo](#Entorno-de-desarrollo)
+   - [Ejecución del Proyecto](#Ejecución-del-Proyecto)
+   - [Módulos](#Módulos-en-Angular)
+   - [Arranque de la App](#Arranque-de-la-app)
+   - [Módulos secundarios](#Módulos-secundarios)
+   - [Directivas](#Directivas-en-angular)
+   - [Pipes](#Pipes-en-angular)
 
 2. [Clase 2](#Clase-2)
-    - [Data Binding](#Data-Binding)
-    - [Servicios e Inyección de Dependencias](#Servicios-e-Inyección-de-Dependencias)
-    - [Router](#Router)
+
+   - [Data Binding](#Data-Binding)
+   - [Servicios e Inyección de Dependencias](#Servicios-e-Inyección-de-Dependencias)
+   - [Router](#Router)
 
 3. [Clase 3](#Clase-3)
-    - [Recuperar información del router](#Recuperar-información-del-router)
-    - [Rutas de guarda](#Rutas-de-guarda)
-    - [Rutas anidadas](#Rutas-anidadas)
+
+   - [Recuperar información del router](#Recuperar-información-del-router)
+   - [Rutas de guarda](#Rutas-de-guarda)
+   - [Rutas anidadas](#Rutas-anidadas)
 
 4. [Clase 4](#Clase-4)
-    - [Formularios](#Formularios)
+   - [Formularios](#Formularios)
 
+5. [Clase 5](#Clase-5)
+   - [HTTP: comunicación con el servidor](#Http:-comunicación-con-servidor-remoto)
 
 ## Clase 1
 
@@ -978,11 +983,12 @@ export class ConfirmService implements CanDeactivate<CanComponentDeactivate> {
 Ahora el componente que quiera verificar su estado antes de salir de la ruta, tiene que implementar la interfaz CanComponentDeactivate que le obliga a implementar el método canDeactivate con la lógica que requiera.
 
 ```js
-export class DataBindingChildExampleComponent implements OnInit, CanComponentDeactivate {
+export class DataBindingChildExampleComponent
+  implements OnInit, CanComponentDeactivate {
   saved: boolean;
 
-  constructor() { }
-  
+  constructor() {}
+
   ngOnInit() {
     this.saved = false;
   }
@@ -993,19 +999,18 @@ export class DataBindingChildExampleComponent implements OnInit, CanComponentDea
     if (saved) {
       return true;
     } else {
-      return confirm('Seguro que quieres salir sin guardar');
+      return confirm("Seguro que quieres salir sin guardar");
     }
   }
 }
 ```
-
-
 
 Práctica:
 en el componente hijo, dar a un botón de guardar y si no se ha pulsado y se intenta a navegar a otro sitio que te salga un confirm.
 dentro de auth confirmService con la interfaz y en el componente child implementa la interfaz.
 
 #### Rutas anidadas
+
 Nos permite definir rutas de forma anidada para construir un árbol de jerarquía en nuestras aplicaciones; de forma que podemos establecer nuevos espacios de renderizado (router-outlet) anidados a componentes que ya se visualizaron en su propio router-outlet
 
 Un componente que dentro tiene un router-outlet(Layout/view), todos los paths + componentes que defina dentro de children van a ir asociados a ese componente padre con el router-outlet
@@ -1016,91 +1021,213 @@ Acordarse de poner en el routerLink que parta siempre de / para ser más determi
 ```js
 const ROUTES: Routes = [
   {
-    path: '',
+    path: "",
     component: AppHomeComponent,
     canActivate: [AuthGuardService],
     children: [
       {
-        path: '',
+        path: "",
         component: HomeDefaultComponent
       }
     ]
   },
   {
-    path: '',
+    path: "",
     component: SimpleLayoutComponent,
     children: [
       {
-        path: 'login',
+        path: "login",
         component: AppLoginComponent
       }
     ]
   },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' }
+  { path: "**", redirectTo: "login", pathMatch: "full" }
 ];
 ```
-
 
 ## Clase 4
 
 ### Formularios
 
-Mayores problemas de seguridad, y la validación de formularios tb es un horror.
-Angular te ofrece una buena parte de validaciones síncronas y asíncronas
+La facilidad de creación y gestión de los formularios con un buen chequeo de errores y personalización de validaciones es uno de los muchos puntos fuertes de Angular, que presenta dos aproximaciones: model driven (uso de la programación reactiva) y template driven (ngModel, con un binding bidireccional). El template driven cada vez está más en desuso porque empeora el rendimiento.
 
-Angular tiene dos formas de acceder: el template driven (ngModel) que hace un binding bidireccional, aqunq cada vez está más en desuso porque empeora el rendimiento. Se prefiere la opción del model react
-Configuración dentro del modulo donde se vaya a usar los formularios. en e import con ReactiveFormsModule.
+Es uno de los mayores problemas de seguridad, y la validación de formularios es un horror.
+Angular te ofrece una buena parte de validaciones síncronas y asíncronas.
 
-angular ofrece una serie de directivas que machean con el modelo registrado en el componente. en el ngOninitvamos a iniciar el modelo de nuestro formulario con this.form = new FormGroup({con los campos})
+#### Configuración Inicial
 
-para machear el modelo con mi html añadimos la directiva [formGroup]="from" a la etiqueta de form, y en las etiquetas de los inputs se anotan con formControlName="username". se pueden crear subgrupos en distintos fieldsets.
-y el submit lo gestionamos nosotros no con el de submit por defecto del form.
+Necesitamos importar el módulo ReactiveFormsModule de la librería forms de angular, dentro del modulo donde se vaya a usar los formularios, dentro de imports como ReactiveFormsModule.
 
-crear el formulario con los campos username y pass
-**modulos que usemos siempre importarlos enel app.module
+Angular ofrece una serie de directivas que machean con el modelo registrado en el componente. En el ngOnInit() vamos a iniciar el modelo de nuestro formulario con this.form = new FormGroup({con los campos})
+
+En el componente donde vaya a estar nuestro formulario, para machear el modelo con mi html añadimos la directiva [formGroup]="from" a la etiqueta de form, y en las etiquetas de los inputs se anotan con formControlName="username". Se pueden crear subgrupos en distintos fieldsets.
+Y la acción del botón submit lo gestionamos nosotros con un evento asociado al click, no con el de submit por defecto del form.
+
+```html
+<form [formGroup]="form">
+  Username: <input type="text" formControlName="username" /> Password:
+  <input type="password" formControlName="password" />
+  <fieldset formGroupName="address">
+    city: <input type="text" formControlName="city" /> postcode:
+    <input type="text" formControlName="postcode" />
+  </fieldset>
+  <button>Send</button>
+</form>
+`
+```
+
+y en el component.ts configurar:
+
+```js
+form: FormGroup;
+
+constructor() { }
+
+ngOnInit() {
+  this.form = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+    address: new FormGroup({
+    city: new FormControl(''),
+    postcode: new FormControl('')
+  })
+}
+```
+
+**Importar SIEMPRE todos los modulos que usemos en el app.module**
 
 #### Validaciones síncronas
 
-required, min, max, email...
-hay que seguir manteniendo las validaciones en el back porque pueden atacar al servidor directamente conun json por ejemplo.
+Como segundo argumento del FormControl se puede pasar un array con el conjunto de validadores síncronos que queremos que nuestro campo supere para considerarlo válido.
+Angular ya cuenta con los siguientes validadores síncronos de serie:
+• **required**: se pone cuando queremos que el campo sea obligatorio.
+• **min**: valida que el valor esté por encima de un valor mínimo.
+• **max**: valida que el valor esté por debajo de un valor máximo.
+• **minLength**: se establece un número mínimo de caracteres para el campo.
+• **maxLength**: se establece un número máximo de caracteres para el campo.
+• **email**: valida que el campo cumpla con el formato de email.
+• **pattern**: se establece que el campo tiene que cumplir con un determinado patrón.
 
-para utilizarlas hay que pasarselo como un array en el segundo elemento del form control('', [Validators.required, Validators.email])
+Aún así, hay que seguir manteniendo las validaciones en el back porque pueden atacar al servidor directamente conun json por ejemplo.
 
-*el servicio Validators no se inyecta en el constructor.*
+_el servicio Validators no se inyecta en el constructor._
 
-Podemos crear nuestro propios validadores sínconos. Para ello, creamos una clase, los metodos de validación tienen ir con el static, todos tienen que ser estáticos. recibirá como argumento el control (el campo del formulario que queremos chequear), solamente uno. y luego en el array de los validators lo incluimos llamando a la clase.staticMethod).
+```js
+this.form = new FormGroup({
+  username: new FormControl("", [Validators.required, Validators.minLength(2)]),
+  password: new FormControl("", [Validators.required])
+});
+```
 
-Qué se devuelve en esto métodos de validación: si la validación es ok, devuelve null (por el tema de los thruthy y falsy en javascript), y si no pasa, devuelvo un objeto con el nombre del método validador y : true para saber qué mensaje específico debo mostrar por pantalla.
+También podemos crear nuestras propias validaciones síncronas. Para ello creamos una clase, por ejemplo, CommonValidator, que va contener métodos estáticos (tienen que estar siempre definidos con static) con los distintos validadores que reciben el FormControl al que se asocia.
 
+Esos métodos recibirán como argumento el control (el campo del formulario que queremos chequear), solamente uno. y luego en el array de los validators lo incluimos llamando a la clase.staticMethodName).
+
+```js
+export class CommonValidator {
+  static startWithNumber(control: FormControl) {
+    let firstChar = control.value.charAt(0);
+    if (firstChar && !isNaN(firstChar)) {
+      return { startWithNumber: true };
+    } else {
+      return null;
+    }
+  }
+}
+```
+
+```js
+this.form = new FormGroup({
+  username: new FormControl("", [
+    Validators.required,
+    Validators.minLength(2),
+    CommonValidator.startWithNumber
+  ]),
+  password: new FormControl("", [Validators.required])
+});
+```
+
+Cuando la validación no se cumple lo que devolvemos es un objeto con el identificador (nombre) de la validación a true (que nos será util para pintar el error en la app) y cuando se cumple devolvemos un null. Esto es porque JavaScript a la hora de interpretar el resultado solo lo va a entender como false si es null.
 
 #### Validaciones asíncronas
-siempre las tienes que implementar tu.
-Siempre tienen que devolver una promesa (new Promise). nuestro método recibe un servicio que hace la comunicación con el servidor.
-tiene dos callbacks, pero solo usamos el de resolve, hacemos la lógica que qeramos. si todo va ok devolvemos null y si no, devolvemos un objeto con el identificador del método: true.
 
-y para utilizarlo en el ts del componente, se pone como []como tercer argumento del FormControl(), llamandolo como class.ValidatorAsincronoMethod(servicioBack)
+Son aquellas que requieren de un proceso asíncrono para poder validarse. Por ejemplo, cuando necesitamos validar el dato contra una fuente de datos externa. También se tratan de métodos estáticos pero con la particularidad de que siempre tienen que devolver una promesa (new Promise) y que siempre las tienes que implementar tu, no vienen por defecto en Angular forms.
+
+```js
+static userTaken(service: UserService) {
+  return(control: FormControl) => {
+    return new Promise((resolve) => {
+      service.checkUser(control.value).subscribe(
+        (response) => {
+          resolve(null);
+        },
+        (error) => {
+          resolve({ 'userTaken': true });
+        }
+      );
+    });
+  };
+};
+```
+
+Nuestro método recibe una instancia del servicio que va a utilizar que hace la comunicación con el servidor.
+Tiene dos callbacks (resolve, reject), pero solo usamos el de resolve, hacemos la lógica que queramos dentro y si todo va ok devolvemos null y si no, devolvemos un objeto con el identificador del método: true.
+
+Para poder asociar esta validación al control que se quiera, tenemos que incluirla como
+tercer parámetro del FormControl en forma de Array
+
+```js
+constructor(private service: UserService) { }
+
+this.form = new FormGroup({
+  username: new FormControl('',
+    [Validators.required, Validators.minLength(2), CommonValidator.startWithNumber],
+    [CommonValidator.userTaken(this.service)]),
+  password: new FormControl('',
+    [Validators.required])
+});
+```
+
+#### Configurar cuándo se lanzan las validaciones
+
+Se establece un nuevo parámetro “updateOn” que permite establecer los valores ‘blur’ si se quiere realizar la validación cuando se pierda el foco de cada elemento, o ‘submit’ en caso de que solo se quiera hacer cuando se pulse en el botón de submit.
+
+```js
+username: new FormControl('', {updateOn: 'blur',
+  [Validators.required,
+  Validators.minLength(2),
+  CommonValidator.startWithNumber]}),
+```
 
 #### Estados de un formulario
-aAngular añade clases a los inputs del formulario por defecto según su estado (relleno, válido...) que nosotros podemos utilizar para cambiar el css.
+Los estados de un formulario vienen determinados por los estados de cada uno de los elementos que componen el formulario, mantienen tres estados que cambian entre estos pares:
 
-ng-:
+* pristine <⇒ dirty: original(no modificado) vs modificado
+* untouched <⇒ touched: que no se ha hecho foco sobre ellos vs cuando pierden el foco (aunque no se haya modificado el valor) pasan a estado “touched”
+* invalid <⇒ valid: este par de estados son los más cambiantes, depende del cumplimiento de las validaciones.
+En base a estos estados Angular varía de forma automática y transparente al desarrollador la clase CSS correspondiente permitiendo definir estilos en función del estado del
+formulario; así podemos definir los siguientes estilos CSS: .ng-valid, .ng-invalid, .ng-touched, .ng-untouched, .ng-pristine, .ng-dirty, ng-pending(pendiente de una validación asíncrona)
 
-pristine(el original) vs dirty(modificado)
-pending: pintar en gris
+Para recoger el error que devuelve la validación si ha ido mal, usamos **form.get('validatormethod')**
+Porque lo suyo es poner un div que se muestra o no en función de si está dirty y si no es válido.
+Y ara saber si ha pasado la validación o no un campo utilizamos **form.get.('username').valid**
 
-solamente se pone touched cuando sales del campo.
+```html
+<div *ngIf="form.get('username').dirty && !form.get('username').valid">
+  <p *ngIf="form.get('username').hasError('minlength')">
+    El nombre debe tener al menos 4 caracteres
+  </p>
+  <p *ngIf="form.get('username').hasError('startWithNumber')">
+    El nombre ya existe
+  </p>
+</div>
+```
 
+## Clase 5
 
-para recoger el error que devuelve la validación si ha ido mal, usamos form.get('validatormethod')
-lo suyo es poner un div que se muestra o no en función de si está dirty y si no es válido.
+### Http: comunicación con servidor remoto
 
-### http
-
-
-
-
-
-
+Instalar y seguir el repo del [servidor-api](https://github.com/raguilera82/api-back-nodejs) 
 
 
 ## Development server
