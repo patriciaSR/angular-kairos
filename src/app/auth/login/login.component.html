@@ -10,5 +10,7 @@
     Password:
     <input name="password" type="password" formControlName="password">
   </label>
-  <button (click)="onSubmit()">Send</button>
+  <button (click)="onSubmit()" [disabled]="!form.valid">Send</button>
 </form>
+
+ {{ form.valid }}

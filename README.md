@@ -1031,6 +1031,29 @@ para machear el modelo con mi html añadimos la directiva [formGroup]="from" a l
 y el submit lo gestionamos nosotros no con el de submit por defecto del form.
 
 crear el formulario con los campos username y pass
+**modulos que usemos siempre importarlos enel app.module
+
+#### Validaciones síncronas
+
+required, min, max, email...
+hay que seguir manteniendo las validaciones en el back porque pueden atacar al servidor directamente conun json por ejemplo.
+
+para utilizarlas hay que pasarselo como un array en el segundo elemento del form control('', [Validators.required, Validators.email])
+
+*el servicio Validators no se inyecta en el constructor.*
+
+Podemos crear nuestro propios validadores sínconos. Para ello, creamos una clase, los metodos de validación tienen ir con el static, todos tienen que ser estáticos. recibirá como argumento el control (el campo del formulario que queremos chequear), solamente uno. y luego en el array de los validators lo incluimos llamando a la clase.staticMethod).
+
+Qué se devuelve en esto métodos de validación: si la validación es ok, devuelve null (por el tema de los thruthy y falsy en javascript), y si no pasa, devuelvo un objeto con el nombre del método validador y : true para saber qué mensaje específico debo mostrar por pantalla.
+
+
+
+
+
+
+
+
+
 
 
 

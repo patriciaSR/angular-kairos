@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CommonValidator } from 'src/app/common-validator';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +14,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      username: new FormControl(''),
-      password: new FormControl('')
+      username: new FormControl('', [Validators.required, CommonValidator.startWithNumber]),
+      password: new FormControl('', [Validators.required, Validators.min(3)])
     });
   }
 
