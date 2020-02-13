@@ -1065,8 +1065,8 @@ pending: pintar en gris
 solamente se pone touched cuando sales del campo.
 
 
-
-
+para recoger el error que devuelve la validación si ha ido mal, usamos form.get('validatormethod')
+lo suyo es poner un div que se muestra o no en función de si está disty y si no es válido.
 
 
 
