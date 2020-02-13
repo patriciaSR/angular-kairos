@@ -1047,6 +1047,13 @@ Podemos crear nuestro propios validadores sínconos. Para ello, creamos una clas
 Qué se devuelve en esto métodos de validación: si la validación es ok, devuelve null (por el tema de los thruthy y falsy en javascript), y si no pasa, devuelvo un objeto con el nombre del método validador y : true para saber qué mensaje específico debo mostrar por pantalla.
 
 
+#### Validaciones asíncronas
+siempre las tienes que implementar tu.
+Siempre tienen que devolver una promesa (new Promise). nuestro método recibe un servicio que hace la comunicación con el servidor.
+tiene dos callbacks, pero solo usamos el de resolve, hacemos la lógica que qeramos. si todo va ok devolvemos null y si no, devolvemos un objeto con el identificador del método: true.
+
+y para utilizarlo en el ts del componente, se pone como []como tercer argumento del FormControl(), llamandolo como class.ValidatorAsincronoMethod(servicioBack)
+
 
 
 

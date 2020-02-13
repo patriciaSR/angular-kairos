@@ -12,4 +12,16 @@ export class CommonValidator {
     }
 
   }
+
+  static userTaken(control: FormControl) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (control.value === 'aa') {
+          resolve({ userTaken: true });
+        } else {
+          resolve(null);
+        }
+      }, 2000);
+    });
+  }
 }
