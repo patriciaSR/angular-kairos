@@ -1054,6 +1054,17 @@ tiene dos callbacks, pero solo usamos el de resolve, hacemos la lógica que qera
 
 y para utilizarlo en el ts del componente, se pone como []como tercer argumento del FormControl(), llamandolo como class.ValidatorAsincronoMethod(servicioBack)
 
+#### Estados de un formulario
+aAngular añade clases a los inputs del formulario por defecto según su estado (relleno, válido...) que nosotros podemos utilizar para cambiar el css.
+
+ng-:
+
+pristine(el original) vs dirty(modificado)
+pending: pintar en gris
+
+solamente se pone touched cuando sales del campo.
+
+
 
 
 
