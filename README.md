@@ -2,6 +2,32 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.1.
 
+## Indice
+
+1. [Clase 1](#-Clase-1)
+    - [¿Por qué Angular](#-¿Por-qué-Angular?) 
+    - [Entorno de Desarrollo](#-Entorno-de-desarrollo) 
+    - [Ejecución del Proyecto](#-Ejecución-del-Proyecto) 
+    - [Módulos](#-Módulos-en-Angular) 
+    - [Arranque de la App](#-Arranque-de-la-app)
+    - [Módulos secundarios](#-Módulos-secundarios)
+    - [Directivas](#-Directivas-en-angular)
+    - [Pipes](#-Pipes-en-angular)
+
+2. [Clase 2](#-Clase-2)
+    - [Data Binding](#-Data-Binding)
+    - [Servicios e Inyección de Dependencias](#-Servicios-e-Inyección-de-Dependencias)
+    - [Router](#-Router)
+
+3. [Clase 3](#-Clase-3)
+    - [Recuperar información del router](#-Recuperar-información-del-router)
+    - [Rutas de guarda](#-Rutas-de-guarda)
+    - [Rutas anidadas](#-Rutas-anidadas)
+
+4. [Clase 4](#-Clase-4)
+    - [Formularios](#-Formularios)
+
+
 ## Clase 1
 
 ### ¿Por qué Angular?
@@ -313,7 +339,7 @@ El `index.html` carga el bundel, no es tu app
 
 `main.css` para setear los estilos de tu app y tus variables globales.
 
-### Módulos
+### Módulos en Angular
 
 Mínimo tiene que haber un módulo principal (App).
 El concepto de módulo, que permite estructurar y organizar la aplicación en áreas funcionales a fin de que puedan
@@ -350,7 +376,7 @@ La separación en módulos por funcionalidades de nuestra app nos permite aplica
 
 Acordarse de los imports y los exports del componente para poder utilizarlos en el módulo principal.
 
-### Directivas
+### Directivas en Angular
 
 3 tipos
 
@@ -469,7 +495,7 @@ Podemos recuperar el indice(index) y si es par(odd) o impar(even) y si es el úl
 
 **Mirar práctica**
 
-### Pipes
+### Pipes en Angular
 
 Los pipes se utilizan para hacer transformaciones sobre la forma de visualización de los datos en la vista.
 La logica de los pipes aplican solo a los templates y se utilizan para la transformación de datos dentro del template.
@@ -701,7 +727,7 @@ No provider for SecondService! --> Si no tenemos el provideIn: 'root', tenemos q
 
 ##### Formas de declarar los providers:
 
-###### useClass
+##### useClass
 
 Directamente dentro del array de providers. Es una simplificación de usar un objeto con las propiedades: provide y useClass, indicando en provide la instancia del servicio y en useClass que servicio la va a implementar. Esta sintaxis extendida es útil cuando la clase a implementar es distinta, como en los casos en lo que queremos cambiar la implementación, para crear un fake. Útil para el testing
 
@@ -721,7 +747,7 @@ Desde Angular 5 este @Inject() ya no hace falta, existe una simplificación SOLO
 constructor(private otherService:OtherService){}
 ```
 
-###### useValue
+##### useValue
 
 Cuando lo que queremos es poder compartir un determinado valor u objeto de forma estática, hacemos uso de la receta useValue.
 Variables que queramos que estén disponibles para toda la app. valores de configuración. En este caso si que hay que usar siempre el {provide, useValue} y para usarlo poner @Inject('token') private config: any dentro del constructor. En este caso en la propiedad provide establecemos un string que será utilizado como token para la localización del provider y en useValue establecemos el valor que queramos.
@@ -737,7 +763,7 @@ y poder hacer uso en la lógica del elemento.
 constructor(@Inject('App.config') private config){}
 ```
 
-#### Router
+### Router
 
 El router es el elemento que se encarga de definir todas las potenciales vistas de la aplicación permitiendo cambiar la vista principal de la aplicación en base a las interacciones del usuario, simulando de esta forma la navegación entre páginas dentro de una aplicación SPA.
 Hay que definir las rutas de la app y relacionar las rutas con los componentes que tiene que renderizar.
@@ -749,7 +775,7 @@ Y esas routas se pasan a traves de los imports con **RouteModule.forRoot(ROUTES)
 
 Para definir los componentes que se renderizan en módulos secundarios, se defie las ROUTES en los modulos secundarios que se va a mostrar ponemos en el objeto de ROUTES el component: Component y en el import se pone **RouteModule.forChild(ROUTES)**
 
-##### Configuración con Lazzy Loading
+#### Configuración con Lazzy Loading
 
 Es lo mejor, salvo que la app sea muy pequeña. Hay que:
 Tener modulos secundarios y sacarlos del modulo principal para cargarlos solo a través del router
@@ -787,13 +813,13 @@ De este modo cuando un usuario haga uso de la aplicación, primero se cargará e
 
 Nota: es importante tener en cuenta que la resolución del router va en orden desde arriba hacia abajo, por tanto no podríamos poner la ruta de los ‘\*\*’ antes que el resto de rutas, ésta siempre tiene que ir la última y el ‘’ la primera.
 
-##### Inyección del router
+#### Inyección del router
 
 El router ya es provider por defecto declarado por angular. Lo podemos utilizar en la lógica de nuestros componentes utilizandolo como thi.router.navigate(['path])
 
 un servicio que te lleve de databinding a directivas
 
-##### Router outlet y router links
+#### Router outlet y router links
 
 El router outlet es la directiva que Angular utiliza para identificar áreas de renderizado en la aplicación, mientras que, el router link es la directiva que hay que utilizar para que Angular sepa montar los enlaces a las distintas rutas.
 
@@ -807,7 +833,7 @@ El router outlet es lo que estará en el template del componente principal App
 <router-outlet></router-outlet>
 ```
 
-##### Navegación desde código
+#### Navegación desde código
 
 Los router links no son la única forma de poder cargar una u otra ruta, esto también lo podemos hacer desde la lógica de cualquier componente, como vemos a continuación:
 
@@ -827,9 +853,9 @@ Esta lógica estaría dentro del componente “TutorialesComponent” y lo que p
 
 ## Clase 3
 
-##### Recuperar información del router
+#### Recuperar información del router
 
-###### params
+##### params
 
 La información, ya sea transmitida a través de la directiva router-link o a través de la función navigate del servicio Router, puede ser recuperada gracias al servicio “ActivatedRoute” que se inyecta en el constructor del componente donde queramos recuperar la información del router.
 
@@ -844,7 +870,7 @@ ngOnInit() {
 }
 ```
 
-###### query params
+##### query params
 
 Los query params se usan para definir parámetros que son opcionales, es decir, que no van a formar parte del path si no que se van a añadir a partir del símbolo “?” en la URL. Estos parámetros pueden transmitirse a través de la directiva router-link. Para pasar información a través de la url.
 
@@ -979,7 +1005,7 @@ Práctica:
 en el componente hijo, dar a un botón de guardar y si no se ha pulsado y se intenta a navegar a otro sitio que te salga un confirm.
 dentro de auth confirmService con la interfaz y en el componente child implementa la interfaz.
 
-##### Rutas anidadas
+#### Rutas anidadas
 Nos permite definir rutas de forma anidada para construir un árbol de jerarquía en nuestras aplicaciones; de forma que podemos establecer nuevos espacios de renderizado (router-outlet) anidados a componentes que ya se visualizaron en su propio router-outlet
 
 Un componente que dentro tiene un router-outlet(Layout/view), todos los paths + componentes que defina dentro de children van a ir asociados a ese componente padre con el router-outlet
@@ -1066,7 +1092,9 @@ solamente se pone touched cuando sales del campo.
 
 
 para recoger el error que devuelve la validación si ha ido mal, usamos form.get('validatormethod')
-lo suyo es poner un div que se muestra o no en función de si está disty y si no es válido.
+lo suyo es poner un div que se muestra o no en función de si está dirty y si no es válido.
+
+### http
 
 
 
