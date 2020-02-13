@@ -1014,6 +1014,26 @@ const ROUTES: Routes = [
 ];
 ```
 
+
+## Clase 4
+
+### Formularios
+
+Mayores problemas de seguridad, y la validación de formularios tb es un horror.
+Angular te ofrece una buena parte de validaciones síncronas y asíncronas
+
+Angular tiene dos formas de acceder: el template driven (ngModel) que hace un binding bidireccional, aqunq cada vez está más en desuso porque empeora el rendimiento. Se prefiere la opción del model react
+Configuración dentro del modulo donde se vaya a usar los formularios. en e import con ReactiveFormsModule.
+
+angular ofrece una serie de directivas que machean con el modelo registrado en el componente. en el ngOninitvamos a iniciar el modelo de nuestro formulario con this.form = new FormGroup({con los campos})
+
+para machear el modelo con mi html añadimos la directiva [formGroup]="from" a la etiqueta de form, y en las etiquetas de los inputs se anotan con formControlName="username". se pueden crear subgrupos en distintos fieldsets.
+y el submit lo gestionamos nosotros no con el de submit por defecto del form.
+
+crear el formulario con los campos username y pass
+
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

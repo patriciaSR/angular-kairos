@@ -1,1 +1,14 @@
 <p>login works!</p>
+
+<form [formGroup]="form">
+  <label for="username">
+    Username:
+    <input name="username" type="text" formControlName="username">
+  </label>
+
+  <label for="password">
+    Password:
+    <input name="password" type="password" formControlName="password">
+  </label>
+  <button (click)="onSubmit()">Send</button>
+</form>
