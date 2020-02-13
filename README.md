@@ -1100,13 +1100,13 @@ ngOnInit() {
 
 Como segundo argumento del FormControl se puede pasar un array con el conjunto de validadores síncronos que queremos que nuestro campo supere para considerarlo válido.
 Angular ya cuenta con los siguientes validadores síncronos de serie:
-• **required**: se pone cuando queremos que el campo sea obligatorio.
-• **min**: valida que el valor esté por encima de un valor mínimo.
-• **max**: valida que el valor esté por debajo de un valor máximo.
-• **minLength**: se establece un número mínimo de caracteres para el campo.
-• **maxLength**: se establece un número máximo de caracteres para el campo.
-• **email**: valida que el campo cumpla con el formato de email.
-• **pattern**: se establece que el campo tiene que cumplir con un determinado patrón.
+* **required**: se pone cuando queremos que el campo sea obligatorio.
+* **min**: valida que el valor esté por encima de un valor mínimo.
+* **max**: valida que el valor esté por debajo de un valor máximo.
+* **minLength**: se establece un número mínimo de caracteres para el campo.
+* **maxLength**: se establece un número máximo de caracteres para el campo.
+* **email**: valida que el campo cumpla con el formato de email.
+* **pattern**: se establece que el campo tiene que cumplir con un determinado patrón.
 
 Aún así, hay que seguir manteniendo las validaciones en el back porque pueden atacar al servidor directamente conun json por ejemplo.
 
@@ -1225,7 +1225,7 @@ Y ara saber si ha pasado la validación o no un campo utilizamos **form.get.('us
 
 ## Clase 5
 
-### Http: comunicación con servidor remoto
+### Http-comunicación con servidor remoto
 
 Instalar y seguir el repo del [servidor-api](https://github.com/raguilera82/api-back-nodejs) 
 
