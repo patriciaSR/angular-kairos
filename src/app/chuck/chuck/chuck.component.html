@@ -4,3 +4,7 @@
 <p>{{ quote | async }}</p>
 
 <button (click)="loadQuote()">Get Quote</button>
+
+<button (click)="loadProtectedQuote()">Get Protected Quote</button>
+<p>{{ protectedQuote | async }}</p>
+

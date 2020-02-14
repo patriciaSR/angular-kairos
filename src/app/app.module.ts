@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
@@ -12,7 +13,7 @@ import { SecondServiceFake } from './second-fake.service copy';
 import { SecondService } from './second.service';
 
 const config = {
-  api: 'http://back'
+  api: 'http://localhost:3001'
 };
 
 const ROUTES: Routes = [
@@ -54,6 +55,7 @@ const ROUTES: Routes = [
     BrowserModule,
     LayoutsModule,
     AuthModule,
+    HttpClientModule,
     // DirectivesModule,
     // DataBindingModule,
     RouterModule.forRoot(ROUTES)

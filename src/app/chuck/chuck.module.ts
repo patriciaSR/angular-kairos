@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthInterceptorService } from '../auth/auth-interceptor.service';
 import { ChuckService } from './chuck.service';
 import { ChuckComponent } from './chuck/chuck.component';
 
 const ROUTES: Routes = [
   { path: '', component: ChuckComponent },
 ];
-
-const config = {api: 'http://localhost:3001/api/random-quote'};
 
 @NgModule({
   declarations: [ChuckComponent],
@@ -18,6 +17,13 @@ const config = {api: 'http://localhost:3001/api/random-quote'};
     RouterModule.forChild(ROUTES),
     HttpClientModule
   ],
-  providers: [{provide: 'config', useValue: config}, ChuckService]
+  providers: [
+    ChuckService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+  ]
 })
 export class ChuckModule { }

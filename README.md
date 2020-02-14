@@ -1289,11 +1289,25 @@ Pasos:
 
 
 
+Pasos para declarar el servicio:
+1. en chuck.module tener el import del HttpClientModule
+2. en el chuck.service injectamos el servicio Httpclient e implementamos el método que haga el this.http.get()
+3. en el chuck.component inyectamos nuestro servcio chuckService e implementamos el método que va a cargar los datos o en el ngOnInit(), con this.service.getMethod() y guardamos los datos en la propiedad que hayamos definido en el componente.
+
+// TODO --> hacer el chuck un modulo lazzy 
 
 
+para un bus de notificaciones no podemos usar el pipe async, porque queremos que esté escuchando las llamadas a la api continuamente. En este caso usaremos el suscribe()
 
+login sevice hace el post con el username y el password a /auth para que devuelve el token, y lo que devuelva lo guardamos en el session storage
 
+login dentro de auth
 
+Pasos auth:
+1. login service
+2. token.dto.ts para implementar la interfaz
+
+hacer la llamada a la api protegida (quote-protected) implementando antes el interceptor de las cabeceras con el barer token
 
 
 ## Development server
