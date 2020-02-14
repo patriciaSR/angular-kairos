@@ -28,6 +28,10 @@ const ROUTES: Routes = [
       {
         path: 'databinding', canActivate: [AuthService],
         loadChildren: () => import('./data-binding/data-binding.module').then(m => m.DataBindingModule)
+      },
+      {
+        path: 'chuck', canActivate: [AuthService],
+        loadChildren: () => import('./chuck/chuck.module').then(m => m.ChuckModule)
       }
     ]
   },

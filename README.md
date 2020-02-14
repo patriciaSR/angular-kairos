@@ -1229,6 +1229,72 @@ Y ara saber si ha pasado la validación o no un campo utilizamos **form.get.('us
 
 Instalar y seguir el repo del [servidor-api](https://github.com/raguilera82/api-back-nodejs) 
 
+observables, la tercera forma de asincronía más actual y más prefereible ahora mismo. Funciona con RxJs, y no es algo exclusivo de angular. Programación reactiva
+
+Hay que suscribirse a la función asíncrona para poder recuperar los datos que devuelva esa promesa.
+y en vez de new Promise, ponemos Observable.create(), si hacemos obs.next es el camino ok y obs.error el de fallo.
+
+y en el subscribe recuperamos con 3 callbacks: data como ok, error como error y el finally  como nada.
+
+Servicion HttpClient ya funciona con observables por defecto. 
+Para poder utilizar el servicio hay que importar el módulo donde vayaos a utilizar este servicio.
+
+A este servicio podemos pasarle información global usando el provider y useValue.
+
+normalmente esta configuración se externaliza en proyectos grandes.
+
+Recuperación de datos: primero hay que determinar qué interfaz necesitamos para recuperar los datos correctamente. Especificamos las propiedades que nos va a devolver el servicio para que mapeen con los datos del servidor en formado json (es como un DTO, data transfer object). Nombrar así con DTO las interfaces que recogerán estos datos.
+
+utilizamos el hhtpp client inyectandolo en el constructor del servicio donde lo vamos a utilizar el http client, y la configuración con @inject. y dentro del servicio creado implementamos métodos que hagan las llamadas al servicio http y tenemos que especificar el tipo de llamada (get, put...) y la interfaz donde se guardarán los datos con <> y entre parentesis le pasas la url api. y este método devolverá un obserbable de esa interfaz.
+
+Es importante para el testing que estos métodos no implementen otro tipo de lógica de cliente porque esto dificultará el testing. Incluir solamente los métodos de llamada al servidor (get, post, put, delete)
+
+Y por ultimo utilizamos este servicio con llamadas al hhttp client lo inyectamos en el componente que lo necesite para recuperar llos datos. y se inyecta en el constructor y hay que subscribirse al método del servicio para recuperar los datos.
+
+hay que meterlo en una variable de tipo Suscription para después en el onDestroy hacer un .unsubscribe(). de esa propiedad this.sub
+
+No inyectar nunca el servicio http client en un componente porque el testing es imposible.
+
+pero realmente lo que se prefiere es usar pipes?¿
+no hacemos el subscribe y directamente asisnamos ese servicio a un atributo del componente de tipo obserbable<UserDTO>
+y dentro del template usamos el **pipe async**, que se encarga de hacer el sub/unsub de forma implicita, automáticamente. Es un pipe por defecto de angular.
+
+cuando no devuelva json, sino texto plano...
+en los parámetro del la llamada, a parte del endoint podemos especificar que el tipo de respuesta es de tipo texto.
+
+si usamos parámetro en la llamada, podemos incluir el body, y el objeto params que sean necesarios para el enpoint con un .set('clave', 'valor').
+Podemos modificar las cabeceras como queramos con HttpHeaders
+el objeto headers es inmutable, por lo que siempre hay que igaualarlo a un nuevo objeto headers.y se pasaría como tercer parámetro en el método como un objeto {headers}
+
+El problema de que esto se podría duplicar en muchos métodos, se crearon los interceptores.
+es un objeto que se pone antes de hacer la llamada, para establecer toda la configuración de la llamada que necesitemos. Se usan para las tokens, login...
+
+los interceptores son injectables, servicios, que implementan HttpInterceptor, y hay que implementar el método intercept() que recibe la request y se llama al siguiente hasy auqe termine?¿?¿ y al final se devuelve next.handle(req) y le pasa la req al siguiente elemento de la lista de interceptores.
+next: guarda la lista de interceptores que hay configurados.
+
+en el modulo donde lo vayamos a usar hay que declarar el provider HTTP_Interceptors dentro del array de providers, useClass y el nombre de nuestro nuevo interceptor y multi: true porque puede ser una lista de interceptores.
+
+Lo más tipico es usarlo para crear un interceptor para modificar las cabeceras.
+
+hay que hacer un clone() de la req original para poder modificar las cabeceras y dentro de este clone establecer las cabeceras. y esa req transformada es la que le paso al siguiente.
+
+practica:
+modulo chuck que tiene dentro un componente chuck y dentro del menu de nav hay que tener otro link que lleve al componente chuck. y que sea lazzy con la ruta '/chuck'
+
+Pasos:
+1. Crear la ruta lazy en el chuck.module
+2. Declararlo en el RouterModule.forChild(ROUTES). No hay falta exportar el componente si se carga por lazzy mode
+3. declarar la ruta en el app.module con 'chuck'
+4. dentro de app-layout component poner un nuevo linck a esa ruta '/chuck'
+
+
+
+
+
+
+
+
+
 
 ## Development server
 
