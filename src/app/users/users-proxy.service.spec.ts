@@ -18,6 +18,7 @@ describe('UsersProxyService', () => {
     // const service: UsersProxyService = TestBed.get(UsersProxyService);
     expect(service).toBeTruthy();
   });
+
   it('should call to server to get users', () => {
     // const service: UsersProxyService = TestBed.get(UsersProxyService);
     const httpMock = TestBed.inject(HttpTestingController);

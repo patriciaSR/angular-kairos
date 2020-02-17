@@ -1519,6 +1519,10 @@ y en el package.json modificar el comando de test en los scripts:
     "test": "ng test --browsers ChromeHeadless --code-coverage --watch",
 ```
 
+en el archivo test.ts configuramos desde donde queremos que los test se lancen
+const context = require.context('./app/users', true, /\.spec\.ts$/);
+
+
 #### Arquitectura de una app testeable
 
 TDD es una herramienta de diseño, que hace que vaya emergiendo la arquitectura de app a medida que se diseñan los tests. Tener el mínimo código posible y muy testeado con una amplia covertura.
