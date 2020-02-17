@@ -1,0 +1,5 @@
+<p>list-users works!</p>
+
+<div *ngFor = "let user of (users$ | async)">
+  {{ user | json }}
+</div>

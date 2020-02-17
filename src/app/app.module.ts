@@ -35,7 +35,11 @@ const ROUTES: Routes = [
       {
         path: 'chuck', canActivate: [AuthService],
         loadChildren: () => import('./chuck/chuck.module').then(m => m.ChuckModule)
-      }
+      },
+      {
+        path: 'users', canActivate: [AuthService],
+        loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+      },
     ]
   },
   {

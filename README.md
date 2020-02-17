@@ -1586,6 +1586,22 @@ y con el .verify() se comprueba que todo se ha llamado correctamente.
 
 crear un modulo de usuarios, y vamos a crear cada elemento con su test
 
+acordarse de meter en el imports del test HttpClientTestingModule
+
+flush para indicar los datos que van a llegar cuando se ejecute el subscribe y el verify es para que el expectOne y el método GET han sido llamados correctamente.
+
+creamos un servicio intermedio entre el proxy y el componente que va a pintar el modelo (que no tiene que ser como el modelo del proxy), que va a adaptar los datos y aplica la lógica de negocio que queramos y se lo pasamos al componente que los va a pintar (SmartComponent).
+
+map funcion de la programacion reactiva que recoge el flujo de la app y se lo pasa a la info que le llega.
+
+no hacer push de objetos en un array. usar el spread operators.
+
+hacer un spyOn(de la instancia del servicio del proxy?¿)
+
+meter el componente en la vista de forma lazy.
+
+**Blog**
+Mostrar la lista de posts con los tests asociados.
 
 
 ## Development server
