@@ -28,6 +28,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
    - [Rutas anidadas](#Rutas-anidadas)
 
 4. [Clase 4](#Clase-4)
+
    - [Formularios](#Formularios)
 
 5. [Clase 5](#Clase-5)
@@ -1100,13 +1101,14 @@ ngOnInit() {
 
 Como segundo argumento del FormControl se puede pasar un array con el conjunto de validadores síncronos que queremos que nuestro campo supere para considerarlo válido.
 Angular ya cuenta con los siguientes validadores síncronos de serie:
-* **required**: se pone cuando queremos que el campo sea obligatorio.
-* **min**: valida que el valor esté por encima de un valor mínimo.
-* **max**: valida que el valor esté por debajo de un valor máximo.
-* **minLength**: se establece un número mínimo de caracteres para el campo.
-* **maxLength**: se establece un número máximo de caracteres para el campo.
-* **email**: valida que el campo cumpla con el formato de email.
-* **pattern**: se establece que el campo tiene que cumplir con un determinado patrón.
+
+- **required**: se pone cuando queremos que el campo sea obligatorio.
+- **min**: valida que el valor esté por encima de un valor mínimo.
+- **max**: valida que el valor esté por debajo de un valor máximo.
+- **minLength**: se establece un número mínimo de caracteres para el campo.
+- **maxLength**: se establece un número máximo de caracteres para el campo.
+- **email**: valida que el campo cumpla con el formato de email.
+- **pattern**: se establece que el campo tiene que cumplir con un determinado patrón.
 
 Aún así, hay que seguir manteniendo las validaciones en el back porque pueden atacar al servidor directamente conun json por ejemplo.
 
@@ -1200,13 +1202,14 @@ username: new FormControl('', {updateOn: 'blur',
 ```
 
 #### Estados de un formulario
+
 Los estados de un formulario vienen determinados por los estados de cada uno de los elementos que componen el formulario, mantienen tres estados que cambian entre estos pares:
 
-* pristine <⇒ dirty: original(no modificado) vs modificado
-* untouched <⇒ touched: que no se ha hecho foco sobre ellos vs cuando pierden el foco (aunque no se haya modificado el valor) pasan a estado “touched”
-* invalid <⇒ valid: este par de estados son los más cambiantes, depende del cumplimiento de las validaciones.
-En base a estos estados Angular varía de forma automática y transparente al desarrollador la clase CSS correspondiente permitiendo definir estilos en función del estado del
-formulario; así podemos definir los siguientes estilos CSS: .ng-valid, .ng-invalid, .ng-touched, .ng-untouched, .ng-pristine, .ng-dirty, ng-pending(pendiente de una validación asíncrona)
+- pristine <⇒ dirty: original(no modificado) vs modificado
+- untouched <⇒ touched: que no se ha hecho foco sobre ellos vs cuando pierden el foco (aunque no se haya modificado el valor) pasan a estado “touched”
+- invalid <⇒ valid: este par de estados son los más cambiantes, depende del cumplimiento de las validaciones.
+  En base a estos estados Angular varía de forma automática y transparente al desarrollador la clase CSS correspondiente permitiendo definir estilos en función del estado del
+  formulario; así podemos definir los siguientes estilos CSS: .ng-valid, .ng-invalid, .ng-touched, .ng-untouched, .ng-pristine, .ng-dirty, ng-pending(pendiente de una validación asíncrona)
 
 Para recoger el error que devuelve la validación si ha ido mal, usamos **form.get('validatormethod')**
 Porque lo suyo es poner un div que se muestra o no en función de si está dirty y si no es válido.
@@ -1227,87 +1230,362 @@ Y ara saber si ha pasado la validación o no un campo utilizamos **form.get.('us
 
 ### Http-comunicación con servidor remoto
 
-Instalar y seguir el repo del [servidor-api](https://github.com/raguilera82/api-back-nodejs) 
+Instalar y seguir el repo del [servidor-api](https://github.com/raguilera82/api-back-nodejs)
 
-observables, la tercera forma de asincronía más actual y más prefereible ahora mismo. Funciona con RxJs, y no es algo exclusivo de angular. Programación reactiva
+La respuesta que ahora por defecto es JSON y, sobre todo, la inclusión de los interceptores.
+Para poder hacer uso del servicio HttpClient de Angular tenemos que importar el módulo
+HttpClientModule que se encuentra dentro de @angular/common/http y contiene todos los providers y elementos necesarios para conectarnos con servidores remotos.
+De este modo vamos a la configuración del módulo que se vaya a conectar con un
+servidor remoto y añadimos el módulo de HttpClientModule, además podemos añadir
+un objeto de configuración general con useValue.
+
+```js
+const config = {api: 'http://servicio.api'};
+
+@NgModule({
+  imports: [HttpClientModule],
+  providers: [{provide: 'config', useValue: config)}]
+})
+```
+
+Ahora creamos un servicio que va a inyectar una instancia del servicio HttpClient y el fichero de configuración. Este servicio será el encargado de hacer de proxy con el servidor remoto a través de los métodos del servicio HttpClient.
+
+Observables, la tercera forma de asincronía más actual y más prefereible ahora mismo. Funciona con RxJs, y no es algo exclusivo de angular. Programación reactiva
 
 Hay que suscribirse a la función asíncrona para poder recuperar los datos que devuelva esa promesa.
 y en vez de new Promise, ponemos Observable.create(), si hacemos obs.next es el camino ok y obs.error el de fallo.
 
-y en el subscribe recuperamos con 3 callbacks: data como ok, error como error y el finally  como nada.
+y en el subscribe recuperamos con 3 callbacks: data como ok, error como error y el finally como nada.
 
-Servicion HttpClient ya funciona con observables por defecto. 
+Servicion HttpClient ya funciona con observables por defecto.
 Para poder utilizar el servicio hay que importar el módulo donde vayaos a utilizar este servicio.
 
 A este servicio podemos pasarle información global usando el provider y useValue.
 
 normalmente esta configuración se externaliza en proyectos grandes.
 
+#### Recuperación de datos
+
+Gracias a la nueva característica de Type Checking del servicio HttpClient va a devolver directamente la información de los usuarios.
+Para ello creamos una interfaz con los datos del usuario:
+
+```js
+export interface User {
+  login: string;
+  name: string;
+}
+```
+
+Y lo utilizamos en nuestra clase:
+
+```js
+export class ApiProxyService {
+  constructor(private http:HttpClient, @Inject('config') private config){}
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.config.api);
+  }
+}
+```
+
+Ahora en el componente inyectamos este servicio (no inyectamos nunca el servicio
+HttpClient directamente dentro de un componente, se puede pero no se debe) y creamos
+dos atributos: users de tipo de User[] y sub de tipo Suscription, los cuales vamos a utilizar en la implementación del método searchUsers. Es importante implementar la interfaz OnDestroy para hacer la desuscripción del Observable y evitar problemas de “memory leak”, a no ser que se haga uso del pipe async.
+
+```js
+export class UsersComponent implements OnDestroy {
+  users: User[];
+  sub: Suscription;
+
+  constructor(private service: ApiProxyService) {}
+
+  searchUsers() {
+    this.sub = this.service.getUsers().subscribe(
+    response => this.users = response.body,
+    error => console.log(error)
+    )
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+}
+```
+
+Como comentamos anteriormente, otra opción que tenemos para visualizar los datos es
+utilizar el pipe async que trabaja directamente con el Observable asumiendo el control
+por nosotros, es decir, se encarga de desuscribirlo en el momento oportuno.
+Para hacer uso de él tenemos que modificar la implementación del método searchUsers
+y el tipo de dato de users que pasa a ser Observable de tipo array de users.
+
+```js
+export class UsersComponent {
+  users: Observable<User[]>;
+
+  constructor(private service: ApiProxyService) {}
+
+  searchUsers() {
+    this.users = this.service.getUsers();
+  }
+}
+```
+
+Y en el template:
+
+```html
+template: `
+<ul>
+  <li *ngFor="let user of (users | async)">
+    {{user.login}} {{user.name}}
+  </li>
+</ul>
+`
+```
+
+eEn caso de que la respuesta no fuera en formato JSON tenemos que especificar el formato con la siguiente sintaxis en el servicio:
+
+```js
+http.get("/textfile.txt", { responseType: "text" });
+```
+
 Recuperación de datos: primero hay que determinar qué interfaz necesitamos para recuperar los datos correctamente. Especificamos las propiedades que nos va a devolver el servicio para que mapeen con los datos del servidor en formado json (es como un DTO, data transfer object). Nombrar así con DTO las interfaces que recogerán estos datos.
 
-utilizamos el hhtpp client inyectandolo en el constructor del servicio donde lo vamos a utilizar el http client, y la configuración con @inject. y dentro del servicio creado implementamos métodos que hagan las llamadas al servicio http y tenemos que especificar el tipo de llamada (get, put...) y la interfaz donde se guardarán los datos con <> y entre parentesis le pasas la url api. y este método devolverá un obserbable de esa interfaz.
+Utilizamos el http client inyectandolo en el constructor del servicio donde lo vamos a utilizar, y la configuración con @inject. Y dentro del servicio creado implementamos métodos que hagan las llamadas al servicio http y tenemos que especificar el tipo de llamada (get, put, post...) y la interfaz donde se guardarán los datos con <> y entre parentesis le pasas la url de la api. Y este método devolverá un obserbable de esa interfaz.
 
 Es importante para el testing que estos métodos no implementen otro tipo de lógica de cliente porque esto dificultará el testing. Incluir solamente los métodos de llamada al servidor (get, post, put, delete)
 
-Y por ultimo utilizamos este servicio con llamadas al hhttp client lo inyectamos en el componente que lo necesite para recuperar llos datos. y se inyecta en el constructor y hay que subscribirse al método del servicio para recuperar los datos.
+Y por ultimo utilizamos este servicio con llamadas al http client lo inyectamos en el componente que lo necesite para recuperar los datos. y se inyecta en el constructor y hay que subscribirse al método del servicio para recuperar los datos.
 
-hay que meterlo en una variable de tipo Suscription para después en el onDestroy hacer un .unsubscribe(). de esa propiedad this.sub
+Hay que definir también una variable de tipo Suscription para después en el onDestroy hacer un .unsubscribe(). de esa propiedad this.sub y así evitr el memory leak.
 
 No inyectar nunca el servicio http client en un componente porque el testing es imposible.
 
-pero realmente lo que se prefiere es usar pipes?¿
-no hacemos el subscribe y directamente asisnamos ese servicio a un atributo del componente de tipo obserbable<UserDTO>
+Pero realmente lo que se prefiere es usar pipes.
+No hacemos el subscribe y directamente asignamos ese servicio a un atributo del componente de tipo obserbable<UserDTO>
 y dentro del template usamos el **pipe async**, que se encarga de hacer el sub/unsub de forma implicita, automáticamente. Es un pipe por defecto de angular.
 
-cuando no devuelva json, sino texto plano...
-en los parámetro del la llamada, a parte del endoint podemos especificar que el tipo de respuesta es de tipo texto.
+Cuando no devuelva json, sino texto plano... en los parámetro de la llamada, a parte del endpoint podemos especificar que el tipo de respuesta es de tipo texto.
 
-si usamos parámetro en la llamada, podemos incluir el body, y el objeto params que sean necesarios para el enpoint con un .set('clave', 'valor').
-Podemos modificar las cabeceras como queramos con HttpHeaders
-el objeto headers es inmutable, por lo que siempre hay que igaualarlo a un nuevo objeto headers.y se pasaría como tercer parámetro en el método como un objeto {headers}
+Si usamos parámetros en la llamada, podemos incluir el body, y el objeto params que sean necesarios para el enpoint con un .set('clave', 'valor').
+Podemos modificar las cabeceras como queramos con HttpHeaders.
+El objeto headers es inmutable, por lo que siempre hay que igualarlo a un nuevo objeto headers. Y se pasaría como tercer parámetro en el método como un objeto {headers}
 
-El problema de que esto se podría duplicar en muchos métodos, se crearon los interceptores.
-es un objeto que se pone antes de hacer la llamada, para establecer toda la configuración de la llamada que necesitemos. Se usan para las tokens, login...
+El problema de que esto se podría duplicar en muchos métodos, por eso se crearon los interceptores.
 
-los interceptores son injectables, servicios, que implementan HttpInterceptor, y hay que implementar el método intercept() que recibe la request y se llama al siguiente hasy auqe termine?¿?¿ y al final se devuelve next.handle(req) y le pasa la req al siguiente elemento de la lista de interceptores.
+#### Interceptores
+
+El concepto de interceptor nos permite interceptar la petición y realizarle una serie de
+modificaciones. Para hacer un interceptor tenemos que crear un servicio (pero podría ser una clase) que implemente la interfaz HttpInterceptor.
+El interceptor recibe la petición y el siguiente interceptor en la cadena, no hace nada y llama al siguiente interceptor. Tenemos que tener en cuenta que el orden en la cadena de interceptores lo va a determinar el orden de definición de providers.
+
+##### Modificar cabeceras
+
+El caso de uso más común es modificar la cabecera de autenticación para añadir el token
+de acceso. Esto lo podemos hacer de la siguiente forma:
+
+```js
+import {Injectable} from '@angular/core';
+import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
+
+@Injectable()
+
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(private auth: AuthService) {}
+
+  intercept(req: HttpRequest<any>,
+  next: HttpHandler): Observable<HttpEvent<any>> {
+
+  // Obtenemos el token
+  const token = this.auth.getToken();
+  // Importante: modificamos de forma inmutable,
+  //haciendo el clonado de la petición
+  const authReq = req.clone(
+    {headers: req.headers.set('Authorization', token)}
+  );
+  // Pasamos al siguiente interceptor de
+  //la cadena la petición modificada
+    return next.handle(authReq);
+  }
+}
+```
+
+Tenemos que tener en cuenta que el orden en la cadena de interceptores lo va a determinar el orden de definición de providers, el cual lo podemos hacer de la siguiente forma:
+
+```js
+@NgModule({
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NoopInterceptor,
+      multi: true
+    }
+  ]
+})
+export class AppModule {}
+```
+
+Un interceptor es un objeto que se pone antes de hacer la llamada, para establecer toda la configuración de la llamada que necesitemos. Se usan para las tokens, login...
+
+Los interceptores son injectables, servicios, que implementan HttpInterceptor, y hay que implementar el método intercept() que recibe la request y se llama al siguiente interceptor y al final se devuelve next.handle(req) y le pasa la req al siguiente elemento de la lista de interceptores.
 next: guarda la lista de interceptores que hay configurados.
 
-en el modulo donde lo vayamos a usar hay que declarar el provider HTTP_Interceptors dentro del array de providers, useClass y el nombre de nuestro nuevo interceptor y multi: true porque puede ser una lista de interceptores.
+En el modulo donde lo vayamos a usar hay que declarar el provider HTTP_Interceptors dentro del array de providers, useClass y el nombre de nuestro nuevo interceptor y multi: true porque puede ser una lista de interceptores.
 
 Lo más tipico es usarlo para crear un interceptor para modificar las cabeceras.
 
-hay que hacer un clone() de la req original para poder modificar las cabeceras y dentro de este clone establecer las cabeceras. y esa req transformada es la que le paso al siguiente.
+Hay que hacer un clone() de la req original para poder modificar las cabeceras y dentro de este clone establecer las cabeceras. Y esa req transformada es la que le paso al siguiente.
 
-practica:
+Práctica:
 modulo chuck que tiene dentro un componente chuck y dentro del menu de nav hay que tener otro link que lleve al componente chuck. y que sea lazzy con la ruta '/chuck'
 
 Pasos:
+
 1. Crear la ruta lazy en el chuck.module
 2. Declararlo en el RouterModule.forChild(ROUTES). No hay falta exportar el componente si se carga por lazzy mode
 3. declarar la ruta en el app.module con 'chuck'
 4. dentro de app-layout component poner un nuevo linck a esa ruta '/chuck'
 
-
-
 Pasos para declarar el servicio:
+
 1. en chuck.module tener el import del HttpClientModule
 2. en el chuck.service injectamos el servicio Httpclient e implementamos el método que haga el this.http.get()
 3. en el chuck.component inyectamos nuestro servcio chuckService e implementamos el método que va a cargar los datos o en el ngOnInit(), con this.service.getMethod() y guardamos los datos en la propiedad que hayamos definido en el componente.
 
-// TODO --> hacer el chuck un modulo lazzy 
+// TODO --> hacer el chuck un modulo lazzy
 
+Para un bus de notificaciones no podemos usar el pipe async, porque queremos que esté escuchando las llamadas a la api continuamente. En este caso usaremos el suscribe()
 
-para un bus de notificaciones no podemos usar el pipe async, porque queremos que esté escuchando las llamadas a la api continuamente. En este caso usaremos el suscribe()
+Login sevice hace el post con el username y el password a /auth para que devuelve el token, y lo que devuelva lo guardamos en el session storage
 
-login sevice hace el post con el username y el password a /auth para que devuelve el token, y lo que devuelva lo guardamos en el session storage
-
-login dentro de auth
+Login dentro de auth
 
 Pasos auth:
+
 1. login service
 2. token.dto.ts para implementar la interfaz
 
-hacer la llamada a la api protegida (quote-protected) implementando antes el interceptor de las cabeceras con el barer token
+Hacer la llamada a la api protegida (quote-protected) implementando antes el interceptor de las cabeceras con el barer token
+Pasos para crear el interceptor del Bearer token:
+
+1. crear el servicio auth-interceptor.service
+2. implementar HttpInterceptor
+3. crear las cabecera de authorization haciendo un clon de la request
+4. devolver next.handle(newReq)
+5. en App Module dentro de providers añadimos uno nuevo con eHTTP_Interceptors
+6. Usar el método en el component.ts de chuck implementando otro método asociado a un eveno click en un botón.
+7. usar el pipe async en el chuck template para pintar la frase que devuelva la api.
+
+### Testing
+
+Red de seguridad que hace que cuando vayamos a modificar algo, ver si estamos rompiendo algo en nuestra app. Da fiabilidad (y seguridad a la hora de subir a producción) y facilita el mantenimiento de nuestra app.
+
+automatización de test
+
+test unitarios y de integración en angular se implementan con Jasmine. Estos test testean exclusivamente a una clase en angular. Los de integración prueban más de una clase y necesito tener levantado algún tipo de servicio como un back. Por eso es tan importante de respetar el principio de responsabilidad única.
+
+Los test de ui se hacen con Protractor (selenium por debajo, y unas veces funciona y otras no), aunque hoy en día cypress es muy utilizado, no tira de selenium y es mucho más determinista. Testeaun un flujo entero de negocio.
+
+se pueden tener subsuites, describes dentro de describes aunque no es recomendable.
+
+pirámide de testing: unitarios - integración - ui(e2e), siendo los unitarios los test más rapidos, y ver la covertura de test de nuestra app.
+Es preferible que cypress vaya en un proyecto independiente, porque lo mejor es que no conozca nada de la app y sea 100% independiente. Y para poder testear en desarrollo y producción.
+
+si añadimos una x al test hacemos que se ignore el test.
+si añadimos una f al test hacemos que solo se ejecute ese test.
+
+el código repetido en tus tests es mejor llevarselo al beforeEach(), por ejemplo hacer instancias de variables y afterEach() para después de cada test.
+
+para ejecutar los test Angular viene configurado con Karma como test runner.
+
+En el karma.config se puede modificar y añadir configuración de la ejecución de los test.
+
+npm run test
+-- --code-coverage para ver el coverage
+
+configurar las settings de vscode para que pille el fichero lcov.info del proyecto y cambiar el script del package.json para que arranque los test con coverage y watch.
+```json
+{
+  "bma-coverage":{
+    "lcovs":[
+      "coverage/lcov.info"
+    ]
+  }
+}
+```
+
+y en el package.json modificar el comando de test en los scripts:
+
+```json
+    "test": "ng test --browsers ChromeHeadless --code-coverage --watch",
+```
+
+#### Arquitectura de una app testeable
+
+TDD es una herramienta de diseño, que hace que vaya emergiendo la arquitectura de app a medida que se diseñan los tests. Tener el mínimo código posible y muy testeado con una amplia covertura.
+
+3 grandes bloques:
+1. componentes, que son difíciles de testear porque están ligados al DOM
+2. Proxies, las clases que inyectan el servicio http client. Muy difícil de testear también.
+3. Dominio (reglas de negocio y modelo, adpatadores, pipes...) en servicios independientes que sí son fáciles de testear. 
+
+#### Fakes
+la parte de comunicación con el servidor, para simplificar el test hay que hacer mocks de esas llamadas al http client por ejemplo. 
+Si utilizamos el método spyOn(), llamando al servicio y al método de ese servicio que queremos mockear y que devuelva lo que nosotros queramos en formato de observable con el método de rxjs of()
+
+forzamos la llamada al componente con un component.ngOnInit(), donde se ejecutará el método que hemos hecho el fake. y con un expect y un toHaveBeenCalled para ver si realmente se ha llamado a nuestro método fake.
+
+#### TestBed
+TestBed es la clase que nos facilita y que nos va a permitir hacer test unitarios y de integración en angular.
+
+Nos sirve para simlular que nuestra app está corriendo, que los modulos esten importados, que los providers estén bien declarados...
+Admite un json de configuración (configureTestingModule) igual que el ngModule() con sus imports y sus providers. Que se incluye enun beforeEach()
+y en los providers podemos usar el useClass para pasarle un fake. Aunque es mejor utilizar los spyOn en vez de cambiarle la implementación del servicio en el provide y usando useClass.
+
+Para recuperar los servicios de la inyección de dependencias se usa testBed.get() para que nos devuelva una instancia de esa clase (como si se hiciera un new).
+
+#### Situaciones de testing
+
+1. Pipe/Servicio sin dependencias
+añades dentro del configureTesting añadir el provider del servicio o del pipe. Si lo tenemos como providerIn 'root' no habría que declararlo explicitamente en el config.
+y usando el pipe.transform() le pasamos los datos iniciales para testear. No olvidarse de declarar el tipo de variable.
+
+2. Pipe/Servicio con dependencias
+Hay que mockear esas dependencias externas. Se puede mockear reimplementando el provide con useClass o lo que se prefiere es usando el spyOn para devolver lo que nosotros queramos de forma síncrona (que siempre es más fácil de testear y más determinista).
+
+3. Test asíncronos
+usar async await antes de implementar la función del test. Siempre con promesas, no con observables.
+
+4. Test de componentes sin dependencias
+en el configureTesting ponemos en las declarations el componente que vamos a testear. Testeamos la lógica, no la vista del componente. El template me da igual. Dentro de escquemas declaramos el No_ERRORS-SCHEMA para que no nos de errores del template.
+con createComponente creamos una instancia del componente y se genera una fixture del comonente=?¿¿?¿ whaaat ?¿
+y así ya podemos llamar a los métodos que tenga nuestro componente para testear su lógica. Pero no testeamos ninguna interacción con el template.
+
+5. Test de componentes con dependencias
+Mockear las dependencias externas para devolver los datos de forma sincrona.
+
+6. Test de navegación
+
+7. Test del Router
+
+8. Formularios
+importar el ReactiveFormsModule
+9. Emision de Eventos @Outputs
+
+Se pueden crear componentes embebidos para testear directivas propias.
+
+#### Test de un servicio con dependencia HttpClient
+testear que la llamada que estamos haciendo es correcta (url correcta).
+
+HttpClientTestingModule y TestingController
+Dentro del describe, en el beforeEach importamos el TestingModule y en el provider el servicio que vamos a testear(el servicio que implementa el httpClient)
+
+Queremos verificar que la llamada al servidor se está produciendo. se hace un httpMock con el TestingController
+.flush() es que la request devuelva los datos fake que nostros queramos, por lo que si hacemos un subscribe  el expect devuelva esos datos fake. Por eso es fundamental que los servicios del http client haga solo eso, devolver los datos de la llamada.
+
+y con el .verify() se comprueba que todo se ha llamado correctamente.
+
+crear un modulo de usuarios, y vamos a crear cada elemento con su test
+
 
 
 ## Development server

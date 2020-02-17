@@ -1,11 +1,13 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { LoginComponent } from './auth/login/login.component';
+import { ChuckService } from './chuck/chuck.service';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { LayoutsModule } from './layouts/layouts.module';
 import { SimpleComponent } from './layouts/simple/simple.component';
@@ -62,7 +64,13 @@ const ROUTES: Routes = [
   ],
   providers: [
     { provide: SecondService, useClass: SecondServiceFake },
-    { provide: 'config', useValue: config }
+    { provide: 'config', useValue: config },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    },
+    ChuckService
   ],
   bootstrap: [AppComponent]
 })
