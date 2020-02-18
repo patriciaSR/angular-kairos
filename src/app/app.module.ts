@@ -62,8 +62,6 @@ const ROUTES: Routes = [
     LayoutsModule,
     AuthModule,
     HttpClientModule,
-    // DirectivesModule,
-    // DataBindingModule,
     RouterModule.forRoot(ROUTES)
   ],
   providers: [

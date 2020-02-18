@@ -8,9 +8,10 @@ import { UsersService } from '../users.service';
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.css']
 })
-export class ListUsersComponent implements OnInit {
 
+export class ListUsersComponent implements OnInit {
   users$: Observable<User[]>;
+
   constructor(private userService: UsersService) { }
 
   ngOnInit(): void {

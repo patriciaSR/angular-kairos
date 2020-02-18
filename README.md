@@ -1475,6 +1475,8 @@ Pasos para crear el interceptor del Bearer token:
 6. Usar el método en el component.ts de chuck implementando otro método asociado a un eveno click en un botón.
 7. usar el pipe async en el chuck template para pintar la frase que devuelva la api.
 
+## Clase 7
+
 ### Testing
 
 Red de seguridad que hace que cuando vayamos a modificar algo, ver si estamos rompiendo algo en nuestra app. Da fiabilidad (y seguridad a la hora de subir a producción) y facilita el mantenimiento de nuestra app.
@@ -1606,6 +1608,49 @@ meter el componente en la vista de forma lazy.
 
 **Blog**
 Mostrar la lista de posts con los tests asociados.
+
+
+##### Compodoc documentation
+https://compodoc.app/guides/installation.html 
+
+npx compodoc -p tsconfig.json
+
+
+
+## Clase 8
+
+### Prgramación reactiva rxjs
+
+Los cambios en las variables son dinámicos.
+
+cualquier cosa en la web provoca una fuente de datos. 
+
+mergeMap()
+
+### Gestión de Estado
+
+Peticiones desde el componente. Condiciones de carrera si utilizamos servicios singleton.
+
+BehaviorSubject almacena el utimo valor emitido y es lo que se utiliza para generar un store.
+
+ngx es como para usarlo en grandes proyectos
+
+pero hay librerias intermedias que te permiten también manejar el estado.
+
+#### ngx-model 
+
+#### Akita
+
+#### Implementar el store service
+
+la clase del store tiene que ser abstract, que no se puede instanciar directamente.
+
+tap() para almacenar lo que nos venda del servidor en el posts. Devolvemos unpromesa para poder utilizar dentro del componente async await.
+
+implementarlo en el proyecto...
+
+
+
 
 
 ## Development server

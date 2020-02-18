@@ -6,6 +6,7 @@ import { UserDTO } from './user-dto.model';
 @Injectable({
   providedIn: 'root'
 })
+
 export class UsersProxyService {
 
   constructor(private httpClient: HttpClient) { }
