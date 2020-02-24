@@ -33,6 +33,19 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 5. [Clase 5](#Clase-5)
    - [HTTP: comunicación con el servidor](#Http-comunicación-con-servidor-remoto)
+   - [Interceptores](#Interceptores)
+
+6. [Clase 6](#Clase-6)
+   - [Testing](#Testing)
+   - [Arquitectura de una app testeable](#Arquitectura-de-una-app-testeable)
+   - [Situaciones de testing](#Situaciones-de-testing)
+   - [Test de un servicio con dependencia HttpClient](#Test-de-un-servicio-con-dependencia-HttpClient)
+
+7. [Clase 7](#Clase-7)
+   - [Programación Reactiva](#Programación-reactiva-rxjs-bis)
+   - [Gestión de Estado](#Gestión-de-estado)
+   - [Implementación de un CRUD](#Implementación-de-un-CRUD-pag-358)
+
 
 ## Clase 1
 
@@ -1475,7 +1488,7 @@ Pasos para crear el interceptor del Bearer token:
 6. Usar el método en el component.ts de chuck implementando otro método asociado a un eveno click en un botón.
 7. usar el pipe async en el chuck template para pintar la frase que devuelva la api.
 
-## Clase 7
+## Clase 6
 
 ### Testing
 
@@ -1737,9 +1750,9 @@ https://compodoc.app/guides/installation.html
 
 npx compodoc -p tsconfig.json
 
-## Clase 8
+## Clase 7
 
-### Programación reactiva rxjs
+### Programación reactiva rxjs bis
 
 Paradigma de programación. Los cambios en las variables son dinámicos. Cualquier cosa en la web provoca una fuente de datos.
 
