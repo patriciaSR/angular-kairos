@@ -1481,7 +1481,10 @@ Pasos para crear el interceptor del Bearer token:
 
 Red de seguridad que hace que cuando vayamos a modificar algo, ver si estamos rompiendo algo en nuestra app. Da fiabilidad (y seguridad a la hora de subir a producción) y facilita el mantenimiento de nuestra app.
 
-automatización de test
+Jasmine: Sus características principales son que no depende de ninguna otra librería JavaScript, tiene una sintaxis obvia y limpia que facilita la escritura de los tests.
+Test Suite (describe()) y test case(it())
+
+Karma, que es un test runner que se integra con Jasmine para ayudarnos a lanzar los tests unitarios y de integración una y otra vez contra los navegadores que consideremos más relevantes. Automatización de los tests
 
 test unitarios y de integración en angular se implementan con Jasmine. Estos test testean exclusivamente a una clase en angular. Los de integración prueban más de una clase y necesito tener levantado algún tipo de servicio como un back. Por eso es tan importante de respetar el principio de responsabilidad única.
 
@@ -1501,16 +1504,16 @@ para ejecutar los test Angular viene configurado con Karma como test runner.
 
 En el karma.config se puede modificar y añadir configuración de la ejecución de los test.
 
-npm run test
--- --code-coverage para ver el coverage
+```bash
+npm run test -- --code-coverage para ver el coverage
+```
 
 configurar las settings de vscode para que pille el fichero lcov.info del proyecto y cambiar el script del package.json para que arranque los test con coverage y watch.
+
 ```json
 {
-  "bma-coverage":{
-    "lcovs":[
-      "coverage/lcov.info"
-    ]
+  "bma-coverage": {
+    "lcovs": ["coverage/lcov.info"]
   }
 }
 ```
@@ -1522,75 +1525,195 @@ y en el package.json modificar el comando de test en los scripts:
 ```
 
 en el archivo test.ts configuramos desde donde queremos que los test se lancen
-const context = require.context('./app/users', true, /\.spec\.ts$/);
-
+const context = require.context('./app/users', true, /\.spec\.ts\$/);
 
 #### Arquitectura de una app testeable
 
 TDD es una herramienta de diseño, que hace que vaya emergiendo la arquitectura de app a medida que se diseñan los tests. Tener el mínimo código posible y muy testeado con una amplia covertura.
 
 3 grandes bloques:
-1. componentes, que son difíciles de testear porque están ligados al DOM
-2. Proxies, las clases que inyectan el servicio http client. Muy difícil de testear también.
-3. Dominio (reglas de negocio y modelo, adpatadores, pipes...) en servicios independientes que sí son fáciles de testear. 
+
+1. **Componentes** (vista de la app ligada al DOM), que son difíciles de testear porque están ligados al DOM. Nos tenemos que preocupar de que los componentes no presenten lógica de negocio más allá de gestionar el estado de la vista e invocar a la lógica de negocio.
+2. **Dominio** (reglas de negocio y modelo, adpatadores, pipes...) en servicios independientes que sí son fáciles de testear. Servicios que aplican las reglas de negocio, adaptadores de información, presentadores, pipes,
+3. **Proxies** (acceso a fuentes de datos externas), las clases que inyectan el servicio http client. Muy difícil de testear también. Tenemos que limitar su utilización a comunicar con el servidor y devolver la información a clases que se encarguen de adaptar esa información a las necesidades de negocio.
+
+Dicho esto las situaciones que tenemos que evitar para facilitar el testing son, entre otras, la inyección del servicio HttpClient a través del constructor de un componente o la inclusión de lógica de adaptación dentro de un método que recupera información del servidor.
 
 #### Fakes
-la parte de comunicación con el servidor, para simplificar el test hay que hacer mocks de esas llamadas al http client por ejemplo. 
+
+Podemos crear fakes de estos servicios gracias a Jasmine, sin tener que recurrir
+a crear ficheros nuevos que hagan aumentar el bundle.
+
+La parte de comunicación con el servidor, para simplificar el test hay que hacer mocks de esas llamadas al http client por ejemplo.
 Si utilizamos el método spyOn(), llamando al servicio y al método de ese servicio que queremos mockear y que devuelva lo que nosotros queramos en formato de observable con el método de rxjs of()
 
-forzamos la llamada al componente con un component.ngOnInit(), donde se ejecutará el método que hemos hecho el fake. y con un expect y un toHaveBeenCalled para ver si realmente se ha llamado a nuestro método fake.
+Forzamos la llamada al componente con un component.ngOnInit(), donde se ejecutará el método que hemos hecho el fake. y con un expect y un toHaveBeenCalled para ver si realmente se ha llamado a nuestro método fake.
+
+```js
+const spyService = spyOn(usersService, "getUsers").and.callFake(() => {
+  return of(users);
+});
+
+component.ngOnInit(); //Dentro se ejecuta el método usersService.getUsers()
+expect(component.users).toBe(users);
+expect(spyService).toHaveBeenCalled();
+```
+
+Otra forma de hacer el fake sería con “returnValue” donde solo le pasamos el valor a devolver de esta forma:
+
+```js
+const spyService = spyOn(usersService, "getUsers").and.returnValue(of(users));
+```
+
+Mockito es un framework de testing que nos facilita la implementación de dobles de prueba para hacer nuestros tests realmente unitarios, que en TypeScript nos proporciona la librería ts-mockito.
 
 #### TestBed
-TestBed es la clase que nos facilita y que nos va a permitir hacer test unitarios y de integración en angular.
 
-Nos sirve para simlular que nuestra app está corriendo, que los modulos esten importados, que los providers estén bien declarados...
-Admite un json de configuración (configureTestingModule) igual que el ngModule() con sus imports y sus providers. Que se incluye enun beforeEach()
+TestBed es la pieza de Angular que nos facilita la implementación de tests unitarios y de integración. Nos permite hacer la declaración de los providers que hubiese dentro del modulo a testear dentro de la función configureTestingModule.
+
+El segundo paso es utilizar ese provider que previamente hemos declarado y lo realizaremos gracias a la función get() o inject() para angular 9 de TestBed que nos devuelve una instancia que previamente hemos declarado como provider, esto lo podemos hacer dentro de beforeEach() o en la lógica de un caso de test.
+
+```js
+beforeEach(() => {
+  carService = TestBed.get(CarService);
+});
+```
+
+Nos sirve para simular que nuestra app está corriendo, que los modulos esten importados, que los providers estén bien declarados...
+Admite un json de configuración (configureTestingModule) igual que el ngModule() con sus imports y sus providers.
 y en los providers podemos usar el useClass para pasarle un fake. Aunque es mejor utilizar los spyOn en vez de cambiarle la implementación del servicio en el provide y usando useClass.
 
 Para recuperar los servicios de la inyección de dependencias se usa testBed.get() para que nos devuelva una instancia de esa clase (como si se hiciera un new).
 
 #### Situaciones de testing
 
-1. Pipe/Servicio sin dependencias
-añades dentro del configureTesting añadir el provider del servicio o del pipe. Si lo tenemos como providerIn 'root' no habría que declararlo explicitamente en el config.
-y usando el pipe.transform() le pasamos los datos iniciales para testear. No olvidarse de declarar el tipo de variable.
+1. **Pipe/Servicio sin dependencias**
+   Añadir dentro del configureTesting el provider del servicio o del pipe a testear. Si lo tenemos como providerIn 'root' no habría que declararlo explicitamente.
+   y usando el pipe.transform() le pasamos los datos iniciales para testear. No olvidarse de declarar el tipo de variable.
 
-2. Pipe/Servicio con dependencias
-Hay que mockear esas dependencias externas. Se puede mockear reimplementando el provide con useClass o lo que se prefiere es usando el spyOn para devolver lo que nosotros queramos de forma síncrona (que siempre es más fácil de testear y más determinista).
+   ```js
+   describe('DecoratorPipe', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [DecoratorPipe]
+      });
+    });
 
-3. Test asíncronos
-usar async await antes de implementar la función del test. Siempre con promesas, no con observables.
+    it ('apply decorator',() => {
+      let pipe: DecoratorPipe = TestBed.get(DecoratorPipe);
+      expect(pipe.transform('Test', '***')).toBe('***Test***');
+    }))
+   })
+   ```
 
-4. Test de componentes sin dependencias
-en el configureTesting ponemos en las declarations el componente que vamos a testear. Testeamos la lógica, no la vista del componente. El template me da igual. Dentro de escquemas declaramos el No_ERRORS-SCHEMA para que no nos de errores del template.
-con createComponente creamos una instancia del componente y se genera una fixture del comonente=?¿¿?¿ whaaat ?¿
-y así ya podemos llamar a los métodos que tenga nuestro componente para testear su lógica. Pero no testeamos ninguna interacción con el template.
+2) **Pipe/Servicio con dependencias**
+   Debemos declarar en la función configureTestingModule de TestBed la clase principal y todas sus dependencias que en caso de querer ser cambiadas se podrá hacer fácilmente con la receta useClass.
+   Hay que mockear esas dependencias externas. Se puede mockear reimplementando el provide con useClass o lo que se prefiere es usando el spyOn para devolver lo que nosotros queramos de forma síncrona (que siempre es más fácil de testear y más determinista).
 
-5. Test de componentes con dependencias
-Mockear las dependencias externas para devolver los datos de forma sincrona.
+3) **Test asíncronos**
+   Angular proporciona el método async que permite indicar que el caso de test se va a ejecutar de forma asíncrona y que lo tenga en cuenta a la hora de la ejecución.
+   Usar async await antes de implementar la función del test. Siempre con promesas, no con observables.
 
-6. Test de navegación
+4) **Test de componentes sin dependencias**
+   En el configureTesting ponemos en las declarations el componente que vamos a testear. Testeamos la lógica, no la vista del componente. El template me da igual. Dentro de schemas declaramos el No_ERRORS-SCHEMA para que no nos de errores del template.
+   con createComponent() se utiliza para crear un fixture del componente que nos devuelve la instancia de la clase que representa el componente. De esta forma en la variable componente tenemos los métodos y atributos que podemos verificar. Pero no testeamos ninguna interacción con el template.
 
-7. Test del Router
+5) **Test de componentes con dependencias**
+   Conviene hacer fake de las dependencias, que generalmente serán servicios con asincronía, de forma que eliminamos esa asincronía, dado que lo que queremos probar es el comportamiento del componente, no nos importa la forma de obtener los datos.
+   Esto se facilita mucho cuando trabajamos con Observables, ya que podemos utilizar cualquier método de creación de observable incluyendo datos fake.
 
-8. Formularios
-importar el ReactiveFormsModule
-9. Emision de Eventos @Outputs
+6) **Test de navegación**
+   Para hacer tests de navegación que nos adviertan cuando nos equivoquemos al establacer cierta ruta en el router de la aplicación.
 
-Se pueden crear componentes embebidos para testear directivas propias.
+7) **Test del Router**
+   Testear cierta lógica que involucre una redirección a través del router.
+   un warning que nos dice
+   El error “‘Cannot match any routes. URL Segment: ‘login’’”. Para evitarlo la forma más rápida y elegante es crearse una clase dentro del mismo test que implemente un stub
+
+   ```js
+   class RouterStub {
+     url = "";
+     navigate(commands: any[], extras?: any) {}
+     navigateByUrl(url: string) {}
+   }
+   ```
+
+   e injectarla como provider.
+
+   ```js
+   beforeEach(() => {
+     localStorage.clear();
+     TestBed.configureTestingModule({
+       providers: [AuthGuardService, { provide: Router, useClass: RouterStub }]
+     });
+   });
+   ```
+
+   Para los casos de testing con ActivatedRoute:
+   Para poder hacer el test tenemos que crear dentro del fichero spec la clase ActivatedRouteStub con el siguiente contenido:
+
+   ```js
+   class ActivatedRouteStub {
+    private subject = new Subject();
+    push(value) {
+      this.subject.next(value);
+    }
+    get params() {
+      return this.subject.asObservable();
+    }
+   }
+
+   it('should navigate not found when user id is 0', () => {
+    const router = TestBed.get(Router);
+    const spy = spyOn(router, 'navigate');
+    const route: ActivatedRouteStub = TestBed.get(ActivatedRouteStub);
+
+    route.push({id: 0});
+    expect(spy).toHaveBeenCalledWith(['not-found']);
+   });
+   ```
+
+8) **Formularios**
+   Primero tenemos que importar el módulo ReactiveFormModule.
+
+   ```js
+   it("should be two fields username and password", () => {
+     expect(component.form.contains("username")).toBeTruthy();
+     expect(component.form.contains("password")).toBeTruthy();
+   });
+
+   it("should required username", () => {
+     const username = component.form.get("username");
+     username.setValue("");
+     expect(username.valid).toBeFalsy();
+   });
+
+   it("should required password", () => {
+     const password = component.form.get("password");
+     password.setValue("12345");
+     expect(password.valid).toBeTruthy();
+   });
+   ```
+
+9) **Test de Emision de Eventos** @Outputs
+   La forma de hacer un test unitario de éstos es realizando la suscripción al EventEmitter que no deja de ser un observable más.
+
+10) **Test de Directivas propias** 
+   La forma de testearla es crear un componente auxiliar dentro del spec que haga uso de la directiva.
+
 
 #### Test de un servicio con dependencia HttpClient
-testear que la llamada que estamos haciendo es correcta (url correcta).
+
+La idea es Testear que la llamada que estamos haciendo es correcta (url correcta).
 
 HttpClientTestingModule y TestingController
-Dentro del describe, en el beforeEach importamos el TestingModule y en el provider el servicio que vamos a testear(el servicio que implementa el httpClient)
+Dentro del describe, en el beforeEach importamos el TestingModule y el provider el servicio que vamos a testear(el servicio que implementa el httpClient)
 
-Queremos verificar que la llamada al servidor se está produciendo. se hace un httpMock con el TestingController
-.flush() es que la request devuelva los datos fake que nostros queramos, por lo que si hacemos un subscribe  el expect devuelva esos datos fake. Por eso es fundamental que los servicios del http client haga solo eso, devolver los datos de la llamada.
+Queremos verificar que la llamada al servidor se está produciendo. Se hace un httpMock con el TestingController
 
-y con el .verify() se comprueba que todo se ha llamado correctamente.
+`.flush()` es que la request devuelva los datos fake que nostros queramos, por lo que si hacemos un subscribe el expect devuelva esos datos fake. Por eso es fundamental que los servicios del http client haga solo eso, devolver los datos de la llamada.
 
-crear un modulo de usuarios, y vamos a crear cada elemento con su test
+y con el `.verify()` se comprueba que todo se ha llamado correctamente.
 
 acordarse de meter en el imports del test HttpClientTestingModule
 
@@ -1604,52 +1727,88 @@ no hacer push de objetos en un array. usar el spread operators.
 
 hacer un spyOn(de la instancia del servicio del proxy?¿)
 
-meter el componente en la vista de forma lazy.
 
 **Blog**
 Mostrar la lista de posts con los tests asociados.
 
+##### *Compodoc documentation
 
-##### Compodoc documentation
-https://compodoc.app/guides/installation.html 
+https://compodoc.app/guides/installation.html
 
 npx compodoc -p tsconfig.json
 
-
-
 ## Clase 8
 
-### Prgramación reactiva rxjs
+### Programación reactiva rxjs
 
-Los cambios en las variables son dinámicos.
+Paradigma de programación. Los cambios en las variables son dinámicos. Cualquier cosa en la web provoca una fuente de datos.
 
-cualquier cosa en la web provoca una fuente de datos. 
+![print-rxjs.png @raguilera82](./src/assets/print-rxjs.png)
 
-mergeMap()
+Mirar libro --> [@raguilera82](https://github.com/raguilera82)
 
 ### Gestión de Estado
 
-Peticiones desde el componente. Condiciones de carrera si utilizamos servicios singleton.
+Mantener cierta información de la aplicación durante todo el ciclo de vida de la aplicación y que todos los componentes tengan acceso puntual a esta información.
+Para resolver está situación podemos implementar otras aproximaciones:
 
-BehaviorSubject almacena el utimo valor emitido y es lo que se utiliza para generar un store.
+* **LocalStorage / SessionStorage**: podemos almacenar el estado en el navegador para
+que pueda ser leído y modificado desde cualquier parte del árbol. Esto presenta
+serios problemas de seguridad ya que cualquier dato en el Local o Session storage
+puede ser fácilmente cambiado por el usuario. Además de que los datos se almacenan
+en plano por lo que hay que tener mucho cuidado de no almacenar información sensible como números de cuenta o contraseñas.
 
-ngx es como para usarlo en grandes proyectos
+* **Servicio Singleton**: podemos almacenar el estado en las propiedades de una clase que definamos como provider dentro del AppModule. De esta forma estará disponible desde cualquier punto del árbol para modificar o leer el estado, aunque esta aproximación sólo sería válida para aplicaciones pequeñas y hay que tener en cuenta que estamos jugando con la mutabilidad del servicio lo que podría provocar efectos colaterales.
 
-pero hay librerias intermedias que te permiten también manejar el estado.
+* **BehaviorSubject**: otra alternativa que ya hemos visto es hacer uso de la programación reactiva y definir un BehaviorSubject que almacene el estado. Además esta clase en RxJS 5 ya cuenta con un método getValue() o simplemente .value que devuelve el último estado almacenado; y cuando cambiamos el estado se emite a todos los suscriptores.
 
-#### ngx-model 
+Cuando la aplicación se hace todavía más grande el Model Pattern puede no ser suficiente, pero antes de dar el salto a NgRx podemos probar Akita.
 
-#### Akita
+Ngx es como para usarlo en grandes proyectos, pero hay librerias intermedias que te permiten también manejar el estado.
 
 #### Implementar el store service
 
-la clase del store tiene que ser abstract, que no se puede instanciar directamente.
-
-tap() para almacenar lo que nos venda del servidor en el posts. Devolvemos unpromesa para poder utilizar dentro del componente async await.
-
-implementarlo en el proyecto...
+La clase del store tiene que ser abstract, que no se puede instanciar directamente.
+tap() para almacenar lo que nos venga del servidor en el posts. Devolvemos una promesa para poder utilizar dentro del componente async/await.
 
 
+### Implementación de un CRUD (*pag 358*)
+Un caso de uso de lo más típicos que nos encontramos a la hora de hacer una aplicación de gestión es la necesidad de hacer CRUDs (Create, Read, Update, Delete) de nuestras entidades.
+
+#### Arquitectura propuesta para tu app
+Es crucial que mantengamos una buena separación por capas donde cada capa tenga una única responsabilidad y se comunique solo con sus vecinas.
+
+Estos componentes visuales van a ser orquestados por el “smart component” que se va a encargar de facilitarle los datos necesarios a través del “store service” que va a mantener actualizado el listado del CRUD en memoria a través del uso de BehaviourSubject.
+
+Lo normal es que este componente solo tenga la dependencia de su store asociado,
+respetando el principio de que el componente no tenga lógica que tengamos que testear.
+Es interesante que los servicios del store devuelvan Promesas con el método toPromise() para ahorrarnos las desuscripciones en el componente. De esta forma el componente recupera la información del Store y no directamente del servidor.
+
+El store se va a comunicar únicamente con el servicio de negocio asociado, donde a través de operadores de RxJS su responsabilidad es adaptar la información que llega del servidor (DTOs) con el modelo definido en la aplicación (Model) aplicando las reglas de negocio que sean necesarias.
+
+Para recuperar los datos del servidor creamos un servicio proxy que a través del servicio HttpClient de Angular nos permita realizar todas las operaciones necesarias contra el servidor, para lo cual definiremos una serie de interfaces (DTOs).
+
+Con esta arquitectura conseguimos mayor mantenibilidad y menor acoplamiento dado
+que el modelo de negocio de la aplicación está desacoplado de los datos que llegan del servidor.
+
+#### Store
+el Store será el encargado de almacenar los elementos en memoria a través de un BehaviorSubject. Podemos crear una **clase abstracta** de la que hereden el resto de stores de nuestra aplicación.
+
+```js
+export abstract class Store<T> {
+  private state$: BehaviorSubject<T> = new BehaviorSubject(undefined);
+  
+  get = (): T => this.state$.getValue();
+  get$ = (): Observable<T> => this.state$.asObservable();
+  store = (nextState: T) => this.state$.next(nextState);
+}
+```
+
+El método get() nos va a devolver el último valor almacenado en el store, el método get$ lo mismo pero en forma de Observable al que poder subscribirnos; y el store nos va a permitir actualizar el valor en memoria y notificar a los subscritores el cambio en los datos actualizándose su interfaz.
+
+
+
+---
 
 
 
@@ -1677,6 +1836,3 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-```
-
-```
