@@ -37,4 +37,32 @@
   <div slot="footer">Contenido footer</div>
 </k-holy>
 
+<hr>
 
+<form [formGroup]="optForm">
+  <div><input type="checkbox" formControlName="a"> Opción A</div>
+  <div><input type="checkbox" formControlName="b"> Opción B</div>
+  <div *ngIf="optForm.get('opcionExtra')"><input type="checkbox" formControlName="opcionExtra">Opción Extra</div>
+</form>
+
+<hr>
+
+<form [formGroup]="profileForm">
+  <label>Nombre</label>
+  <input type="text" id="name" formControlName="name">
+  <label>Descripción</label>
+  <textarea id="description" formControlName="description"></textarea>
+  <div formArrayName="intervals">
+    <button (click)="addInterval()">Añadir intervalo</button>
+    <div *ngFor="let interval of intervalsForms().controls; let i=index;" [formGroupName]="i">
+      <label>Tipo de hora</label>
+      <input formControlName="hourType">
+      <label>Hora</label>
+      <input formControlName="hour">
+      <label>Valor</label>
+      <input formControlName="powerValue">
+      <button (click)="deleteInterval(i)">Borrar</button>
+    </div>
+  </div>
+  <button (click)="send()">Aceptar</button>
+</form>
