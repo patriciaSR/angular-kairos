@@ -1819,6 +1819,54 @@ export abstract class Store<T> {
 
 El método get() nos va a devolver el último valor almacenado en el store, el método get$ lo mismo pero en forma de Observable al que poder subscribirnos; y el store nos va a permitir actualizar el valor en memoria y notificar a los subscritores el cambio en los datos actualizándose su interfaz.
 
+## Clase 9
+
+### StencilsJS y Design Sistems
+
+Front: pintar el ui en pantalla
+UI: maquetación (skech?¿, adobe xd, figma)
+UX: disposicion de los datos, experiencia de usuario, flujo de la app
+
+Hay un bloqueo entre ui y front que hace qu el producto salga más tarde. 
+Para solucionarlo, aparece el DevUi y en Ui el uso de WebComponents(stencil, lit element...)
+
+StencilsJs fue sacado por Ionic. Es un compilador de WebComponents. Ionic4 y 5 se puede integrar perfectamente con react, vue y angular.
+
+Todo lo carga de forma lazy, los componentes, tests...
+
+El render se ha demostrado que renderiza los cambios más rapido que otra estrategia.
+
+con npm link lincamos la libreria de stencil como dependencia en nuestro proyecto de angular y en el main.ts se importa el defineCustomElements() y para que sepa que tiene que usar una librería de terceros hay que declararlo dentro de schemas en app.module como CUSTOM_ELEMENTS_SCHEMA (para usar cualquier librería externa que no esté preparada para usarla en Angular).
+
+Elementos del API:
+define todo lo que se puede hacer con decoradores:
+@prop() equivalente al @input() de angular
+@watch() para detectar cambios en la propiedad y ejecutar métodos.
+@state(): definir propiedades que si son modificadas llaman a la función render.
+@method() para exponer un método al exterior, habilitar el uso del método desde el exterior del componente. No suele ser una buena práctica.
+@element() para obtener referencia al elemento en el DOM, equivalente a un document.queryselector?¿
+@event equivale al @output() EventEmitter de angular y la emisión de eventos hijo->padre No debería usarse en exceso.
+@listen() para escuchar eventos del DOM.
+
+Pero lo ideal es que los componentes tengan la mínima lógica, que sean exclusivos de visualización. Y la lógica incluirla en tu front.
+
+hooks: ciclos de vida del componente.
+los más utilizados son el DidLoad == ngOnInit. No hacer muchas llamadas a apis dentro de estos componentes(mejor dejarselo a angular), excepto en los widgets que vayan a recibir datos y directamente los pintes, si solo hace una única cosa sí tendría más lógica. Si la lógica es más compleja mejor hacerlo en angular.
+
+layout holy responsive
+se definen etiquetas 'slot' para stablecer regiones del componente donde queremos meter información.
+si hay varios slots hay que ponerle un name.
+y luego en angular, usamos la etiqueta del componente y dentro, para especificar las etiquetas que queremos meter en nuestros slot con el atributo slot="nombre del slot".
+
+los custom elements siempre tienen que contener un guión.
+Nunca tener props en stencils que sean palabras reservadas (ej: id), aunque solo sea un warning.
+
+Cada vez que creemos un componente nuevo en stencils hacer un npm run build del proyecto para que se actualice el link en angular.
+
+
+implementar stencils con StoryBook.
+
+Knobs para ver las opciones del componente.
 
 
 ---

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppLayoutComponent } from './app-layout/app-layout.component';
 import { SimpleComponent } from './simple/simple.component';
@@ -12,6 +12,7 @@ import { SimpleComponent } from './simple/simple.component';
     CommonModule,
     RouterModule
   ],
-  exports: [SimpleComponent, AppLayoutComponent]
+  exports: [SimpleComponent, AppLayoutComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class LayoutsModule { }
