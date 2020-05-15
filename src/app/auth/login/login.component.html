@@ -54,7 +54,7 @@
   <textarea id="description" formControlName="description"></textarea>
   <div formArrayName="intervals">
     <button (click)="addInterval()">Añadir intervalo</button>
-    <div *ngFor="let interval of intervalsForms().controls; let i=index;" [formGroupName]="i">
+    <div *ngFor="let interval of intervalsForms.controls; let i=index;" [formGroupName]="i">
       <label>Tipo de hora</label>
       <input formControlName="hourType">
       <label>Hora</label>

@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  intervalsForms() {
+  get intervalsForms() {
     return this.profileForm.get('intervals') as FormArray;
   }
 
@@ -59,11 +59,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       powerValue: [''],
     });
 
-    this.intervalsForms().push(interval);
+    this.intervalsForms.push(interval);
   }
 
   deleteInterval(i: number) {
-    this.intervalsForms().removeAt(i);
+    this.intervalsForms.removeAt(i);
   }
 
   send() {
